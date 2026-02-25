@@ -7,7 +7,6 @@
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 
   <style>
-    /* ========== IMPORTAÇÕES E VARIÁVEIS ========== */
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@500;700;900&display=swap');
 
     :root {
@@ -24,12 +23,7 @@
       --c-special: #78909C;
     }
 
-    /* ========== ESTILOS GLOBAIS ========== */
     ::-webkit-scrollbar { width: 0px; height: 0px; display: none; }
-    ::-webkit-scrollbar-track { display: none; }
-    ::-webkit-scrollbar-thumb { display: none; }
-    ::-webkit-scrollbar-thumb:hover { display: none; }
-
     * { 
       box-sizing: border-box; 
       margin: 0; 
@@ -54,7 +48,6 @@
       align-items: center; 
     }
 
-    /* ========== TELAS DE MENU ========== */
     .screen { 
       position: fixed; 
       top: 0; 
@@ -79,7 +72,6 @@
       pointer-events: all; 
     }
 
-    /* ========== CAIXAS DE FORMULÁRIO ========== */
     .box { 
       background: var(--panel-bg); 
       border: 2px solid var(--gold-dark); 
@@ -106,7 +98,6 @@
       .hub-box { grid-template-columns: 1fr 1fr; } 
     }
 
-    /* ========== TIPOGRAFIA ========== */
     .title { 
       font-family: 'Playfair Display', serif; 
       font-size: clamp(22px, 5vw, 32px); 
@@ -123,7 +114,6 @@
       margin-bottom: 10px; 
     }
 
-    /* ========== INPUTS E SELECTS ========== */
     .input-g { 
       display: flex; 
       flex-direction: column; 
@@ -183,7 +173,6 @@
       transform: translateY(-2px);
     }
 
-    /* ========== SELECT CUSTOMIZADO ========== */
     .custom-select {
       position: relative;
       width: 100%;
@@ -197,10 +186,10 @@
       background: rgba(0,0,0,0.6);
       border: 2px solid #222;
       color: #fff;
-      padding: 14px 18px; /* Adicionado padding para afastar da seta */
+      padding: 14px 18px;
       font-size: 14px;
       border-radius: 12px;
-      text-align: left; /* Alinhado à esquerda para não esmagar */
+      text-align: left; 
       font-weight: 700;
       cursor: pointer;
       transition: 0.3s;
@@ -210,7 +199,7 @@
     .select-selected:after {
       content: "▼";
       position: absolute;
-      right: 18px; /* Afastado da borda */
+      right: 18px; 
       top: 16px;
       font-size: 12px;
       color: var(--gold-main);
@@ -248,7 +237,7 @@
 
     .select-items div {
       color: #fff;
-      padding: 12px 18px; /* Alinhamento consistente */
+      padding: 12px 18px; 
       text-align: left;
       font-size: 14px;
       font-weight: 700;
@@ -266,7 +255,6 @@
       color: var(--gold-main);
     }
 
-    /* ========== BOTÕES ========== */
     .btn { 
       background: linear-gradient(135deg, var(--gold-main), var(--gold-dark)); 
       color: #000; 
@@ -316,7 +304,6 @@
       box-shadow: 0 0 20px rgba(220,163,69,0.3), inset 0 0 10px rgba(220,163,69,0.15);
     }
 
-    /* ========== SELETOR DE AVATARES ========== */
     .av-wrap { 
       width: 100%; 
       overflow: hidden; 
@@ -375,7 +362,6 @@
       border-color: rgba(255,0,0,0.2);
     }
 
-   /* ========== LISTA DE LOBBY ========== */
     .lobby-list { 
       display: flex; 
       flex-direction: column; 
@@ -387,11 +373,11 @@
     .lobby-p { 
       display: flex; 
       align-items: center; 
-      gap: 15px; /* Espaço entre avatar e nome */
+      gap: 15px; 
       background: rgba(0,0,0,0.5); 
-      padding: 12px 16px; /* <-- AQUI: 16px nas laterais dá o respiro perfeito! */
+      padding: 12px 16px; 
       border-radius: 12px; 
-      border-left: 4px solid #333; /* <-- 4px deixa o traço do Host bem visível */
+      border-left: 4px solid #333; 
       font-size: 16px; 
       font-weight: bold;
       width: 100%;
@@ -399,17 +385,16 @@
     }
 
     .lobby-p .av-opt {
-      margin: 0 !important; /* Força o avatar a colar na esquerda */
+      margin: 0 !important; 
       width: 44px;
       height: 44px;
       font-size: 24px;
-      flex-shrink: 0; /* <-- Adicione isso! Impede que o avatar encolha se o nome for grande */
+      flex-shrink: 0; 
     }
 
     .lobby-p.host { 
       border-color: var(--gold-main); 
     }
-    /* ========== LAYOUT DO JOGO ========== */
     #game-ui { 
       display: none; 
       width: 100%; 
@@ -463,7 +448,6 @@
       white-space: nowrap; 
     }
 
-    /* ========== ÁREA DO TABULEIRO ========== */
     #board-area { 
       flex: none; 
       width: 100%; 
@@ -483,14 +467,13 @@
       overflow: visible;
       width: 100%; 
       max-width: 1000px; 
-      aspect-ratio: 1/1; /* manter quadrado por padrão */
+      aspect-ratio: 1/1; 
       position: relative; 
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
 
-   /* 1. LARGURA DA COLUNA INTEIRA (Diminui o espaço que os cards ocupam na tela) */
       #sidebar { 
-        width: 210px; /* coluna mais fina para alargar o tabuleiro */
+        width: 210px; 
         min-width: 210px; 
         max-width: 210px; 
         flex-shrink: 0; 
@@ -501,32 +484,26 @@
         padding-right: 5px;
       } 
       
-      /* Espaço entre um cartão e outro */
       #p-list { display: flex; flex-direction: column; gap: 8px; }
       
-      /* 2. A CAIXA DO JOGADOR EM SI */
       .p-card { 
-        padding: 8px; /* <-- Diminui o espaço interno/gordura da caixa */
+        padding: 8px; 
         border-radius: 8px; 
         gap: 4px;
       }
       
-      /* 3. TAMANHO DO AVATAR */
       .p-av { 
-        width: 26px;  /* Largura da bolinha */
-        height: 26px; /* Altura da bolinha */
-        font-size: 14px; /* Tamanho do emoji */
+        width: 26px;  
+        height: 26px; 
+        font-size: 14px; 
       }
       
-      /* 4. TAMANHO DO NOME E DO DINHEIRO */
-      .p-info h3 { font-size: 11px; } /* Nome */
-      .p-money { font-size: 14px; }   /* Dinheiro */
+      .p-info h3 { font-size: 11px; } 
+      .p-money { font-size: 14px; }   
       
-      /* 5. INVENTÁRIO (As casinhas compradas que ficam embaixo do nome) */
       .p-inventory { max-height: 80px; gap: 3px; padding-top: 4px; }
       .inv-badge { font-size: 8px; padding: 2px 4px; }
 
-    /* ========== CÉLULAS DO TABULEIRO ========== */
     .cell { 
       background: var(--board-bg); 
       display: flex; 
@@ -565,7 +542,6 @@
       height: 4px; 
     }
 
-    /* ========== TIPOGRAFIA DO TABULEIRO ========== */
     .prop-name { 
       font-size: clamp(5px, 1.5vw, 10px); 
       font-weight: 800; 
@@ -628,7 +604,6 @@
       width: 100%;
     }
 
-    /* ========== DADOS E TOKENS ========== */
     .die { 
       width: 13vw; 
       height: 12vw; 
@@ -699,7 +674,6 @@
       100% { transform: translateY(-10px) rotate(20deg); } 
     }
 
-    /* ========== MODAIS ========== */
     .modal { 
       background: linear-gradient(135deg, var(--panel-bg), #0a0a0e);
       border: 2px solid var(--gold-main); 
@@ -750,7 +724,30 @@
       flex-direction: column; 
     }
 
-    /* ========== RESPONSIVE - DESKTOP (TABULEIRO WIDESCREEN) ========== */
+    #global-event-alert {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--gold-dark), #e67e22);
+      color: #000;
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+      z-index: 2000;
+      text-align: center;
+      display: none;
+      animation: slideDown 0.5s ease forwards;
+      border: 2px solid #fff;
+    }
+
+    @keyframes slideDown {
+      from { top: -100px; opacity: 0; }
+      to { top: 20px; opacity: 1; }
+    }
+
     @media (min-width: 1024px) { 
       #game-ui { 
         flex-direction: row; 
@@ -770,12 +767,11 @@
         min-height: 15px; 
       } 
       
-      /* TABULEIRO EXPANDIDO E ALARGADO! */
       #board { 
         height: 100%; 
         width: auto; 
-        aspect-ratio: 1.25 / 1; /* Transforma o quadrado em retângulo largo */
-        max-width: calc(100vw - 300px); /* Mais espaço para o tabuleiro reduzindo a margem da sidebar */
+        aspect-ratio: 1.25 / 1; 
+        max-width: calc(100vw - 300px); 
         max-height: calc(100vh - 40px); 
         border-width: 4px; 
         border-radius: 20px; 
@@ -783,9 +779,8 @@
         flex-shrink: 0; 
       }
       
-      /* 1. LARGURA DA COLUNA INTEIRA */
       #sidebar { 
-        width: 180px; /* reduzir para dar mais largura ao tabuleiro */
+        width: 180px; 
         min-width: 180px; 
         max-width: 120px; 
         flex-shrink: 0; 
@@ -798,57 +793,51 @@
       
       #p-list { display: flex; flex-direction: column; gap: 10px; }
       
-      /* 2. A CAIXINHA DO JOGADOR (BEM DEFINIDA E ELEGANTE) */
       .p-card { 
-        background: #111115; /* Fundo que destaca a caixa do fundo preto */
-        border: 2px solid #333; /* Borda cinza para desenhar a caixa */
-        padding: 10px; /* Espaço interno para o texto não colar na borda */
-        border-radius: 12px; /* Deixa os cantos da caixa arredondados */
+        background: #111115; 
+        border: 2px solid #333; 
+        padding: 10px; 
+        border-radius: 12px; 
         display: flex; 
         flex-direction: column; 
         gap: 6px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.8); /* Sombra para dar volume de "cartão" */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.8); 
       }
 
-      /* CAIXINHA DE QUEM ESTÁ JOGANDO AGORA (BRILHA EM DOURADO) */
       .p-card.act {
-        border: 2px solid var(--gold-main); /* Borda dourada forte */
+        border: 2px solid var(--gold-main); 
         background: linear-gradient(135deg, #1a1a24, #0f0f14);
         box-shadow: 0 4px 15px rgba(220,163,69,0.2);
       }
       
-    /* 3. TAMANHO DO AVATAR E NOME NA MESMA LINHA */
       .p-card-top { display: flex; align-items: center; gap: 10px; }
       
       .p-av { 
         width: 32px;  
         height: 32px; 
         font-size: 16px; 
-        border: 2px solid #444; /* Bordinha no avatar também */
-        border-radius: 50%; /* <-- A MÁGICA PARA DEIXAR REDONDO AQUI! (50% faz um círculo perfeito) */
-        display: flex; /* Essas 3 linhas de baixo garantem que o emoji fique bem no centro da bolinha */
+        border: 2px solid #444; 
+        border-radius: 50%; 
+        display: flex; 
         justify-content: center; 
         align-items: center; 
-        flex-shrink: 0; /* Impede que a bolinha seja esmagada e vire um ovo */
+        flex-shrink: 0; 
       }
       
-      /* 4. TEXTOS DENTRO DA CAIXA */
       .p-info { display: flex; flex-direction: column; overflow: hidden; }
       .p-info h3 { font-size: 12px; margin: 0; color: #ccc; }
       .p-card.act .p-info h3 { color: #fff; font-weight: 900; }
       .p-money { font-size: 16px; font-weight: 900; color: #4CAF50; margin-top: 2px; }
       
-      /* 5. INVENTÁRIO (Fica dentro da caixa, abaixo de uma linha divisória) */
       .p-inventory { 
         max-height: 80px; 
         gap: 4px; 
         padding-top: 8px; 
-        border-top: 1px solid #333; /* Cria uma linha separando o nome das posses */
+        border-top: 1px solid #333; 
       }
-      .p-card.act .p-inventory { border-color: rgba(220,163,69,0.3); } /* Linha fica dourada no turno dele */
+      .p-card.act .p-inventory { border-color: rgba(220,163,69,0.3); } 
       .inv-badge { font-size: 9px; padding: 3px 5px; border-radius: 4px; }
 
-      /* Textos recalculados para as casas retangulares mais largas */
       .prop-name { 
         font-size: clamp(8px, 1.2vw, 13px); 
         padding: 4px; 
@@ -926,12 +915,10 @@
 
   min-height: 0;
 }
-/* Cantos arredondados reais */
 #c-0 { border-top-left-radius: 20px; }
 #c-10 { border-top-right-radius: 20px; }
 #c-20 { border-bottom-right-radius: 20px; }
 #c-30 { border-bottom-left-radius: 20px; }
-
 
   </style>
 </head>
@@ -1013,6 +1000,7 @@
 </div>
 
 <div id="game-ui">
+    <div id="global-event-alert">🚨 ACONTECEU ALGO!</div>
     <div id="board-area">
         <div id="board">
             <div class="center-area">
@@ -1037,7 +1025,6 @@
 </div>
 
 <script>
-  /* ========== CONFIG E DADOS DO JOGO ========== */
   const conf = [
     { t: 'c', n: 'INÍCIO', g: '1/1' },
     { t: 'p', n: 'Pastel do Madruga', pr: 60, al: [2, 10, 30, 90], up: 50, c: 'var(--c-brown)', g: '1/2' },
@@ -1081,37 +1068,100 @@
     { t: 'p', n: 'Lassai', pr: 400, al: [50, 200, 600, 1400], up: 200, c: 'var(--c-blue)', g: '2/1' }
   ];
 
-  const evs = [
-    { t: 'g', v: 150, d: "O crítico Michelin elogiou seu prato! Receba $150." }, 
-    { t: 'l', v: 100, d: "Terremoto! Quebrou taças de cristal. Pague $100." },
-    { t: 'g', v: 200, d: "Investidor Anjo fez um PIX de $200." }, 
-    { t: 'l', v: 150, d: "Inflação! Cimento subiu. Pague $150." },
-    { t: 'g', v: 300, d: "Prêmio: Melhor Chef do Ano! Ganhe $300." }, 
-    { t: 'l', v: 200, d: "Crise de Crédito no mercado! Pague $200." },
-    { t: 'g', v: 250, d: "Bolha Imobiliária! Seu bairro é o novo hype. +$250." }, 
-    { t: 'l', v: 100, d: "Gentrificação afastou clientes. Pague $100." },
-    { t: 'g', v: 200, d: "Herança! Seu tio deixou barras de ouro. +$200." }, 
-    { t: 'l', v: 250, d: "Quebra da Bolsa! Pague $250 ao banco." },
-    { t: 'g', v: 150, d: "Subsídio Gov! Programa Minha Cozinha. +$150." }, 
-    { t: 'l', v: 150, d: "Máquinas de Cartão fora do ar! Pague $150." },
-    { t: 'g', v: 100, d: "Cartão Black aprovado sem anuidade. Receba $100." }, 
-    { t: 'l', v: 200, d: "Contador desviou verba para o tigrinho. Pague $200." },
-    { t: 'g', v: 200, d: "Reality Show gravou na sua rua hoje. +$200." }, 
-    { t: 'l', v: 150, d: "Embargo de Obra por achar vaso antigo. Multa de $150." },
-    { t: 'g', v: 150, d: "Sorte no Leilão de geladeiras inox. +$150." }, 
-    { t: 'l', v: 200, d: "Auditoria Fiscal do Governo! Pague $200." },
-    { t: 'm', v: 16, d: "Tornado Gastronômico! O vento te jogou na Gelateria!" }
-  ];
+ const sorteRevesCartas = [
+  // ------------------ SORTE ------------------
+  { t: 'g', v: 150, d: "O crítico Michelin elogiou seu prato! Receba $150." },
+  { t: 'g', v: 200, d: "Um influenciador famoso comeu no seu restaurante. +$200." },
+  { t: 'g', v: 300, d: "Você ganhou o prêmio de Melhor Chef do Ano! +$300." },
+  { t: 'g', v: 250, d: "Seu prato viralizou no TikTok! Faturamento bombou: +$250." },
+  { t: 'g', v: 100, d: "Você reduziu o desperdício de alimentos. Economizou $100." },
+  { t: 'g', v: 180, d: "Seu restaurante saiu na capa da revista gastronômica. +$180." },
+  { t: 'g', v: 220, d: "Você fechou evento corporativo exclusivo. +$220." },
+  { t: 'g', v: 120, d: "Fim de semana lotado no delivery. +$120." },
+  { t: 'g', v: 350, d: "Um investidor decidiu apostar no seu negócio! +$350." },
+  { t: 'g', v: 275, d: "Seu restaurante virou ponto turístico da cidade! +$275." },
+  { t: 'g', v: 500, d: "Avaliação 5 estrelas em todas as plataformas! +$500." },
+  { t: 'g', v: 90, d: "Parceria com aplicativo de entrega rendeu bônus. +$90." },
+
+  // ------------------ REVÉS ------------------
+  { t: 'l', v: 100, d: "Sua cozinha pegou fogo e você perdeu ingredientes. Pague $100." },
+  { t: 'l', v: 150, d: "Fiscalização encontrou produtos vencidos! Multa de $150." },
+  { t: 'l', v: 200, d: "Um cliente processou você por intoxicação alimentar. Pague $200." },
+  { t: 'l', v: 100, d: "Greve de caminhoneiros atrasou as entregas. Perdeu $100." },
+  { t: 'l', v: 250, d: "Seu freezer quebrou de madrugada. Carnes estragadas: -$250." },
+  { t: 'l', v: 180, d: "Queda de energia durante jantar especial. Reembolsos: -$180." },
+  { t: 'l', v: 300, d: "Praga atingiu seu estoque orgânico. -$300." },
+  { t: 'l', v: 80, d: "Multa por atraso no pagamento do gás. -$80." },
+  { t: 'l', v: 220, d: "Concorrente abriu promoção agressiva. -$220." },
+  { t: 'l', v: 400, d: "Processo trabalhista inesperado. -$400." },
+  { t: 'l', v: 160, d: "Equipamento industrial quebrou. -$160." },
+  { t: 'l', v: 130, d: "Avaliações negativas reduziram seu faturamento. -$130." }
+];
+
+
+/* ------------------ EVENTOS GLOBAIS ------------------ */
+/* ACONTECEM DO NADA COM TODOS NA SALA */
+
+const globalEvents = [
+  {
+    n: "Feriado Nacional!",
+    d: "As ruas estão lotadas. Todos os jogadores ganham $150!",
+    eff: (p) => p.money += 150
+  },
+  {
+    n: "Crise Hídrica",
+    d: "Falta de água na cidade. Todos perdem $100.",
+    eff: (p) => { p.money -= 100; checkBankruptcy(p); }
+  },
+  {
+    n: "Incentivo do Governo",
+    d: "A prefeitura liberou auxílio para comerciantes! Todos ganham $200!",
+    eff: (p) => p.money += 200
+  },
+  {
+    n: "Apagão Geral",
+    d: "Falta de energia na cidade inteira estragou estoques. Todos perdem $150.",
+    eff: (p) => { p.money -= 150; checkBankruptcy(p); }
+  },
+  {
+    n: "Festival Gastronômico",
+    d: "Evento culinário movimentou a cidade! Todos ganham $250!",
+    eff: (p) => p.money += 250
+  },
+  {
+    n: "Alta no Preço dos Insumos",
+    d: "Ingredientes ficaram mais caros. Todos perdem $200.",
+    eff: (p) => { p.money -= 200; checkBankruptcy(p); }
+  },
+  {
+    n: "Turismo em Alta",
+    d: "A cidade recebeu muitos turistas! Todos ganham $180!",
+    eff: (p) => p.money += 180
+  },
+  {
+    n: "Fiscalização Intensiva",
+    d: "Nova onda de inspeções sanitárias. Todos pagam $120.",
+    eff: (p) => { p.money -= 120; checkBankruptcy(p); }
+  },
+  {
+    n: "Programa de TV Culinário",
+    d: "Reality show gastronômico movimentou o setor! Todos ganham $300!",
+    eff: (p) => p.money += 300
+  },
+  {
+    n: "Recessão Econômica",
+    d: "Clientes estão gastando menos. Todos perdem $250.",
+    eff: (p) => { p.money -= 250; checkBankruptcy(p); }
+  }
+];
 
   const colors = ['var(--c-p1)', 'var(--c-p2)', 'var(--c-p3)', 'var(--c-p4)', 'var(--c-p5)', 'var(--c-p6)'];
   const upN = ['Reforma Básica', 'Cozinha Premium', 'Estrela Michelin 🌟'];
 
-  /* ========== VARIÁVEIS GLOBAIS ========== */
   let myAv = '👨‍🍳', myName = 'Magnata', myId = null, isHost = false, peer = null, conns = [], roomId = '', rPass = '';
-  let gs = { st: 'LOBBY', ps: [], props: [], turn: 0, d1: 1, d2: 1, modal: null, cfg: { cash: 2500, max: 6 } };
+  let gs = { st: 'LOBBY', ps: [], props: [], turn: 0, d1: 1, d2: 1, modal: null, cfg: { cash: 2500, max: 6 }, turnCount: 0 };
   let connectTimeout = null;
 
-  /* ========== SCRIPT DO SELECT CUSTOMIZADO ========== */
   function setupCustomSelects() {
     var x, i, j, l, ll, selElmnt, a, b, c;
     x = document.getElementsByClassName("custom-select");
@@ -1183,7 +1233,6 @@
   document.addEventListener("click", closeAllSelect);
   window.addEventListener('DOMContentLoaded', setupCustomSelects);
 
-  /* ========== EVENTOS DO NAVEGADOR ========== */
   window.addEventListener('beforeunload', (e) => {
     if (gs.st !== 'LOBBY' && document.getElementById('game-ui').style.display === 'flex') {
       e.preventDefault();
@@ -1195,7 +1244,6 @@
     if(peer) peer.destroy(); 
   });
 
-  /* ========== FUNÇÕES DE INTERFACE ========== */
   function selAv(e) {
     document.querySelectorAll('.av-opt').forEach(el => el.classList.remove('sel'));
     event.target.classList.add('sel');
@@ -1230,7 +1278,6 @@
     uiBack();
   }
 
-  /* ========== FUNÇÕES DE SALA ========== */
   function createRoom() {
     const raw = document.getElementById('host-name').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
     roomId = raw.length > 0 ? raw : Math.random().toString(36).substring(2, 6).toUpperCase();
@@ -1258,7 +1305,6 @@
     }, 8000);
   }
 
-  /* ========== PEER CONNECTION ========== */
   function initPeer(idStr) {
     peer = new Peer(idStr ? 'IG-' + idStr : undefined);
     peer.on('open', id => {
@@ -1348,7 +1394,6 @@
     else conns[0].send(act);
   }
 
-  /* ========== FUNÇÕES DE JOGADOR ========== */
   function addPlayerToState(pid, pName, pAv) {
     let finalAv = pAv;
     if (gs.ps.some(p => p.av === finalAv)) {
@@ -1380,7 +1425,6 @@
     broadcast();
   }
 
-  /* ========== LÓGICA DO JOGO ========== */
   function processAction(pid, act) {
     const pIdx = gs.ps.findIndex(p => p.id === pid);
     if (pIdx < 0) return;
@@ -1454,22 +1498,33 @@
     } else if (c.t === 'x') {
       pagar(p, null, c.val, c.n);
     } else if (c.t === 'e') {
-      const ev = evs[Math.floor(Math.random() * evs.length)];
+      // EVENTO DE CARTA - SORTE OU REVÉS (Somente se cair na casa)
+      const ev = sorteRevesCartas[Math.floor(Math.random() * sorteRevesCartas.length)];
       if (ev.t === 'g') {
         p.money += ev.v;
         showM('Sorte', ev.d, ['Coletar']);
-      } else if (ev.t === 'm') {
-        p.pos = ev.v;
-        showM('Tornado', ev.d, ['Ir']);
       } else {
         pagar(p, null, ev.v, `Revés<br><br>${ev.d}`);
       }
-    } else if (c.n === 'INSPEÇÃO') {
+    } else if (c.n === 'Inspeção') {
       p.pos = 10;
       p.inJail = true;
       showM('Interditado', 'Vigilância lacrou tudo. Você foi conduzido.', ['Aceitar']);
     } else {
       nextTurn();
+    }
+  }
+
+  function checkBankruptcy(p) {
+    if (p.money < 0) {
+      p.faliu = true;
+      p.inJail = false;
+      gs.props.forEach(pr => {
+        if (pr.dono === p.id) {
+          pr.dono = null;
+          pr.lvl = 0;
+        }
+      });
     }
   }
 
@@ -1501,36 +1556,50 @@
       gs.props[p.pos].lvl++;
     }
     if (m.t === 'FALÊNCIA') {
-      p.faliu = true;
-      p.inJail = false;
-      gs.props.forEach(pr => {
-        if (pr.dono === p.id) {
-          pr.dono = null;
-          pr.lvl = 0;
-        }
-      });
+      checkBankruptcy(p);
     }
     if (m.t === 'Vigilância Sanitária' && i === 0) {
       p.money -= 50;
       p.inJail = false;
-    }
-    if (m.t === 'Tornado') {
-      pass = false;
-      resolveCell(p);
     }
     if (pass) nextTurn();
   }
 
   function nextTurn() {
     gs.modal = null;
+    
+    gs.turnCount++;
+    
+    if (gs.turnCount % 10 === 0 && Math.random() < 0.3) {
+        const evt = globalEvents[Math.floor(Math.random() * globalEvents.length)];
+        
+        gs.ps.forEach(player => {
+            if (!player.faliu) {
+                evt.eff(player);
+            }
+        });
+        
+        showGlobalAlert(evt.n, evt.d);
+    }
+    
     do {
       gs.turn = (gs.turn + 1) % gs.ps.length;
     } while (gs.ps[gs.turn].faliu);
+    
     gs.st = 'IDLE';
     broadcast();
   }
+  
+  function showGlobalAlert(title, desc) {
+      const alertBox = document.getElementById('global-event-alert');
+      alertBox.innerHTML = `⚠️ ${title} ⚠️<br><span style="font-size: 12px; font-weight: normal;">${desc}</span>`;
+      alertBox.style.display = 'block';
+      
+      setTimeout(() => {
+          alertBox.style.display = 'none';
+      }, 6000);
+  }
 
-  /* ========== RENDERIZAÇÃO ========== */
   function render() {
     if (gs.st === 'LOBBY') {
       const used = gs.ps.map(p => p.av);
@@ -1596,7 +1665,6 @@
       if (c) {
         const r = c.getBoundingClientRect();
         const br = board.getBoundingClientRect();
-        // A matemática usa metades relativas da própria célula: ela não quebra com aspecto retangular!
         t.style.top = `${r.top - br.top + r.height / 2 - (window.innerWidth < 1024 ? 10 : 13)}px`;
         t.style.left = `${r.left - br.left + r.width / 2 - (window.innerWidth < 1024 ? 10 : 13)}px`;
       }
