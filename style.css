@@ -830,78 +830,6 @@
       .p-card.act .p-inventory { border-color: rgba(220,163,69,0.3); } 
       .inv-badge { font-size: 9px; padding: 3px 5px; border-radius: 4px; }
 
-/* === Minhas Propriedades (apenas para o jogador local) === */
-.my-props{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  margin-top:10px;
-  padding-top:8px;
-  border-top:1px solid #333;
-  position:relative;
-}
-.p-card.act .my-props{ border-top-color: rgba(220,163,69,0.35); }
-
-.prop-card{
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.15));
-  border:1px solid rgba(255,255,255,0.06);
-  border-left:4px solid var(--pc);
-  border-radius:10px;
-  padding:8px 10px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
-  transform: translateY(0);
-}
-/* efeito cascata */
-.my-props .prop-card + .prop-card{ margin-top:-10px; }
-
-.prop-card-top{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:8px;
-}
-.prop-card-name{
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1.1;
-}
-.prop-card-stars{
-  font-size: 10px;
-  color: var(--gold-light);
-  white-space: nowrap;
-}
-.prop-card-rent{
-  margin-top:6px;
-  font-size: 10px;
-  color:#cfcfcf;
-}
-
-.prop-empty{
-  font-size:10px;
-  color:#888;
-  padding: 6px 0 2px;
-}
-
-/* Modal: mensagem para quem não é o jogador da vez */
-.modal-wait{
-  font-size: 11px;
-  color:#aaa;
-  text-align:center;
-  padding: 10px 6px;
-}
-
-@media (min-width: 1024px){
-  .prop-card-name{ font-size: 12px; }
-  .prop-card-rent{ font-size: 11px; }
-}
-
-@media (max-width: 1023px){
-  .my-props{ gap:6px; margin-top:6px; padding-top:6px; }
-  .prop-card{ padding:7px 9px; border-radius:9px; }
-  .my-props .prop-card + .prop-card{ margin-top:-8px; }
-}
-
-
       .prop-name { 
         font-size: clamp(8px, 1.2vw, 13px); 
         padding: 4px; 
@@ -984,68 +912,61 @@
 #c-20 { border-bottom-right-radius: 20px; }
 #c-30 { border-bottom-left-radius: 20px; }
 
+/* ============================= */
+/* FORÇAR DESKTOP NO MOBILE */
+/* ============================= */
+
 @media (max-width: 1023px) {
 
+  html, body {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
   #game-ui {
-    flex-direction: column;
-    padding: 5px;
-    gap: 5px;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    padding: 20px !important;
+    gap: 30px !important;
+    min-width: 1200px;
   }
 
   #board-area {
-    width: 100%;
-    height: auto;
+    flex: 2 !important;
+    height: 100% !important;
   }
 
   #board {
-    width: 100%;
-    max-width: 100%;
-    aspect-ratio: 1 / 1;
+    height: 100% !important;
+    width: auto !important;
+    aspect-ratio: 1.25 / 1 !important;
   }
 
   #sidebar {
-    width: 100%;
-    min-width: unset;
-    max-width: unset;
-    padding: 0;
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
   }
 
-  #p-list {
+}
+/* BLOQUEAR RETRATO */
+@media (max-width: 1023px) and (orientation: portrait) {
+
+  body::before {
+    content: "Gire o celular para jogar";
+    position: fixed;
+    inset: 0;
+    background: #060608;
+    color: #dca345;
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 900;
+    z-index: 999999;
   }
 
-  .p-card {
-    padding: 6px;
-    border-radius: 8px;
+  #game-ui {
+    display: none !important;
   }
-
-  .p-money {
-    font-size: 14px;
-  }
-
-  .p-av {
-    width: 26px;
-    height: 26px;
-    font-size: 14px;
-  }
-
-  .token {
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-  }
-
-  .die {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-  }
-
-  #b-roll {
-    font-size: 14px;
-    padding: 10px;
-  }
-
 }
