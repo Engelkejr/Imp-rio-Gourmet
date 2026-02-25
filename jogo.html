@@ -1069,7 +1069,6 @@
   ];
 
  const sorteRevesCartas = [
-  // ------------------ SORTE ------------------
   { t: 'g', v: 150, d: "O crítico Michelin elogiou seu prato! Receba $150." },
   { t: 'g', v: 200, d: "Um influenciador famoso comeu no seu restaurante. +$200." },
   { t: 'g', v: 300, d: "Você ganhou o prêmio de Melhor Chef do Ano! +$300." },
@@ -1082,8 +1081,6 @@
   { t: 'g', v: 275, d: "Seu restaurante virou ponto turístico da cidade! +$275." },
   { t: 'g', v: 500, d: "Avaliação 5 estrelas em todas as plataformas! +$500." },
   { t: 'g', v: 90, d: "Parceria com aplicativo de entrega rendeu bônus. +$90." },
-
-  // ------------------ REVÉS ------------------
   { t: 'l', v: 100, d: "Sua cozinha pegou fogo e você perdeu ingredientes. Pague $100." },
   { t: 'l', v: 150, d: "Fiscalização encontrou produtos vencidos! Multa de $150." },
   { t: 'l', v: 200, d: "Um cliente processou você por intoxicação alimentar. Pague $200." },
@@ -1097,10 +1094,6 @@
   { t: 'l', v: 160, d: "Equipamento industrial quebrou. -$160." },
   { t: 'l', v: 130, d: "Avaliações negativas reduziram seu faturamento. -$130." }
 ];
-
-
-/* ------------------ EVENTOS GLOBAIS ------------------ */
-/* ACONTECEM DO NADA COM TODOS NA SALA */
 
 const globalEvents = [
   {
@@ -1153,8 +1146,41 @@ const globalEvents = [
     d: "Clientes estão gastando menos. Todos perdem $250.",
     eff: (p) => { p.money -= 250; checkBankruptcy(p); }
   }
+  
 ];
 
+const individualEvents = [
+  {
+    n: "Cliente VIP",
+    d: "Um milionário adorou sua cozinha! +$300.",
+    eff: (p) => p.money += 300
+  },
+  {
+    n: "Chef Inspirado",
+    d: "Você criou um prato exclusivo! +$250.",
+    eff: (p) => p.money += 250
+  },
+  {
+    n: "Equipamento Quebrado",
+    d: "Seu forno industrial queimou. -$200.",
+    eff: (p) => { p.money -= 200; checkBankruptcy(p); }
+  },
+  {
+    n: "Roubo no Caixa",
+    d: "Desvio interno detectado. -$150.",
+    eff: (p) => { p.money -= 150; checkBankruptcy(p); }
+  },
+  {
+    n: "Contrato Corporativo",
+    d: "Você fechou contrato fixo mensal! +$400.",
+    eff: (p) => p.money += 400
+  },
+  {
+    n: "Avaliação Negativa Viral",
+    d: "Review negativa espalhou na internet. -$250.",
+    eff: (p) => { p.money -= 250; checkBankruptcy(p); }
+  }
+];
   const colors = ['var(--c-p1)', 'var(--c-p2)', 'var(--c-p3)', 'var(--c-p4)', 'var(--c-p5)', 'var(--c-p6)'];
   const upN = ['Reforma Básica', 'Cozinha Premium', 'Estrela Michelin 🌟'];
 
@@ -1498,7 +1524,6 @@ const globalEvents = [
     } else if (c.t === 'x') {
       pagar(p, null, c.val, c.n);
     } else if (c.t === 'e') {
-      // EVENTO DE CARTA - SORTE OU REVÉS (Somente se cair na casa)
       const ev = sorteRevesCartas[Math.floor(Math.random() * sorteRevesCartas.length)];
       if (ev.t === 'g') {
         p.money += ev.v;
@@ -1567,28 +1592,39 @@ const globalEvents = [
 
   function nextTurn() {
     gs.modal = null;
-    
+
     gs.turnCount++;
-    
+
     if (gs.turnCount % 10 === 0 && Math.random() < 0.3) {
         const evt = globalEvents[Math.floor(Math.random() * globalEvents.length)];
-        
+
         gs.ps.forEach(player => {
             if (!player.faliu) {
                 evt.eff(player);
             }
         });
-        
+
         showGlobalAlert(evt.n, evt.d);
     }
-    
+
+    if (Math.random() < 0.2) {
+        const currentPlayer = gs.ps[gs.turn];
+
+        if (!currentPlayer.faliu) {
+            const evt = individualEvents[Math.floor(Math.random() * individualEvents.length)];
+
+            evt.eff(currentPlayer);
+
+            showM(evt.n, evt.d, ['Continuar']);
+        }
+    }
     do {
-      gs.turn = (gs.turn + 1) % gs.ps.length;
+        gs.turn = (gs.turn + 1) % gs.ps.length;
     } while (gs.ps[gs.turn].faliu);
-    
+
     gs.st = 'IDLE';
     broadcast();
-  }
+}
   
   function showGlobalAlert(title, desc) {
       const alertBox = document.getElementById('global-event-alert');
@@ -1728,26 +1764,7 @@ const globalEvents = [
       document.getElementById('sc-modal').classList.remove('active');
     }
   }
-  /* ==========================================
-     MODO DE TESTE VISUAL (APAGUE QUANDO TERMINAR)
-     ========================================== */
-  window.onload = () => {
-    // Esconde os menus
-    document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
-    document.getElementById('game-ui').style.display = 'flex';
-    
-    // Cria jogadores falsos
-    myId = 'teste';
-    gs.ps = [
-      { id: 'teste', name: 'Magnata Teste', av: '👨‍🍳', color: 'var(--c-p1)', money: 2500, pos: 0, faliu: false, inJail: false },
-      { id: 'bot', name: 'Bot Investidor', av: '👩‍🍳', color: 'var(--c-p2)', money: 2500, pos: 0, faliu: false, inJail: false }
-    ];
-    
-    // Inicia o tabuleiro
-    gs.st = 'IDLE';
-    conf.forEach(c => gs.props.push({ dono: null, lvl: 0 }));
-    render();
-  };
+  
 </script>
 </body>
 </html>
