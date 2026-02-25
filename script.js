@@ -684,14 +684,30 @@ const individualEvents = [
     l.innerHTML = '';
     gs.ps.forEach((p, i) => {
       if (p.faliu) return;
-      let invHtml = '<div class="p-inventory">';
-      gs.props.forEach((pr, idx) => {
-        if (pr.dono === p.id) {
-          const cData = conf[idx];
-          invHtml += `<span class="inv-badge" style="background:${cData.c || '#555'}">${cData.n} ${'★'.repeat(pr.lvl)}</span>`;
-        }
-      });
-      invHtml += '</div>';
+      let invHtml = '';
+      // Cada jogador vê APENAS as próprias propriedades (com aluguel) em formato de cartões em cascata
+      if (p.id === myId) {
+        let hasAny = false;
+        invHtml = '<div class="my-props">';
+        gs.props.forEach((pr, idx) => {
+          if (pr.dono === p.id) {
+            hasAny = true;
+            const cData = conf[idx];
+            const rent = (cData.al && cData.al.length) ? cData.al[pr.lvl] : 0;
+            invHtml += `
+              <div class="prop-card" style="--pc:${cData.c || '#555'}">
+                <div class="prop-card-top">
+                  <div class="prop-card-name">${cData.n}</div>
+                  <div class="prop-card-stars">${'★'.repeat(pr.lvl)}</div>
+                </div>
+                <div class="prop-card-rent">Aluguel: <b>$${rent}</b></div>
+              </div>`;
+          }
+        });
+        if (!hasAny) invHtml += '<div class="prop-empty">Sem propriedades</div>';
+        invHtml += '</div>';
+      }
+
       
       const isTurn = i === gs.turn;
       const turnIndicator = isTurn ? `<span style="font-size: 10px; color: var(--gold-main); font-weight: 900; margin-left: auto;">SUA VEZ</span>` : '';
@@ -725,14 +741,18 @@ const individualEvents = [
       document.getElementById('m-desc').innerHTML = gs.modal.d;
       const b = document.getElementById('m-btns');
       b.innerHTML = '';
-      gs.modal.b.forEach((txt, i) => {
-        const bt = document.createElement('button');
-        bt.innerText = txt;
-        bt.className = i === 1 ? 'btn btn-sec' : 'btn';
-        bt.disabled = !isMyTurn;
-        bt.onclick = () => sendAction({ type: 'MODAL_ACT', idx: i });
-        b.appendChild(bt);
-      });
+      if (isMyTurn) {
+        gs.modal.b.forEach((txt, i) => {
+          const bt = document.createElement('button');
+          bt.innerText = txt;
+          bt.className = i === 1 ? 'btn btn-sec' : 'btn';
+          bt.onclick = () => sendAction({ type: 'MODAL_ACT', idx: i });
+          b.appendChild(bt);
+        });
+      } else {
+        // Outros jogadores NÃO veem opções de compra/ação (só a informação)
+        b.innerHTML = '<div class="modal-wait">Aguardando a ação do jogador da vez...</div>';
+      }
       document.getElementById('sc-modal').classList.add('active');
     } else {
       document.getElementById('sc-modal').classList.remove('active');
