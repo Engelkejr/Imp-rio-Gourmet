@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Império Gourmet - Edição Magnata</title>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
+  <style>
+    /* ========== IMPORTAÇÕES E VARIÁVEIS ========== */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@500;700;900&display=swap');
+
+    :root {
+      --bg-base: #060608;
+      --panel-bg: #121216;
+      --board-bg: #15151a;
+      --gold-light: #fce8a1;
+      --gold-main: #dca345;
+      --gold-dark: #966b22;
+      --text-main: #ffffff;
+      --c-p1: #3498db; --c-p2: #e74c3c; --c-p3: #2ecc71; --c-p4: #9b59b6; --c-p5: #f1c40f; --c-p6: #00bcd4;
+      --c-brown: #8D6E63; --c-lblue: #29B6F6; --c-pink: #EC407A; --c-orange: #FF9800;
+      --c-red: #EF5350; --c-yellow: #FBC02D; --c-green: #66BB6A; --c-blue: #42A5F5;
+      --c-special: #78909C;
+    }
+
+    /* ========== ESTILOS GLOBAIS ========== */
+    ::-webkit-scrollbar { width: 0px; height: 0px; display: none; }
+    ::-webkit-scrollbar-track { display: none; }
+    ::-webkit-scrollbar-thumb { display: none; }
+    ::-webkit-scrollbar-thumb:hover { display: none; }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Montserrat', sans-serif; 
+      user-select: none; 
+      -webkit-tap-highlight-color: transparent; 
+      scrollbar-width: none; 
+      scrollbar-color: transparent transparent; 
+    }
+    
+    *::-webkit-scrollbar { display: none; }
+
+    html, body { 
+      width: 100%; 
+      height: 100dvh; 
+      overflow: hidden; 
+      background: var(--bg-base); 
+      color: var(--text-main); 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+    }
+
+    /* ========== TELAS DE MENU ========== */
+    .screen { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100dvh; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      background: rgba(5, 5, 7, 0.98); 
+      z-index: 3000; 
+      opacity: 0; 
+      pointer-events: none; 
+      transition: 0.4s ease; 
+      flex-direction: column; 
+      padding: 15px; 
+      overflow-y: auto;
+    }
+
+    .screen.active { 
+      opacity: 1; 
+      pointer-events: all; 
+    }
+
+    /* ========== CAIXAS DE FORMULÁRIO ========== */
+    .box { 
+      background: var(--panel-bg); 
+      border: 2px solid var(--gold-dark); 
+      padding: clamp(20px, 4vw, 30px); 
+      border-radius: 24px; 
+      width: 100%; 
+      max-width: 450px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 15px; 
+      box-shadow: 0 15px 40px rgba(0,0,0,0.9); 
+      text-align: center; 
+      margin: auto;
+    }
+
+    .hub-box { 
+      max-width: 800px; 
+      display: grid; 
+      grid-template-columns: 1fr; 
+      gap: 20px; 
+    }
+
+    @media (min-width: 768px) { 
+      .hub-box { grid-template-columns: 1fr 1fr; } 
+    }
+
+    /* ========== TIPOGRAFIA ========== */
+    .title { 
+      font-family: 'Playfair Display', serif; 
+      font-size: clamp(22px, 5vw, 32px); 
+      color: var(--gold-main); 
+      margin-bottom: 5px; 
+      text-shadow: 0 4px 10px rgba(220,163,69,0.2);
+    }
+
+    .subtitle { 
+      font-size: 11px; 
+      color: #888; 
+      text-transform: uppercase; 
+      letter-spacing: 2px; 
+      margin-bottom: 10px; 
+    }
+
+    /* ========== INPUTS E SELECTS ========== */
+    .input-g { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px; 
+      text-align: left; 
+      position: relative;
+    }
+
+    .input-g label { 
+      font-size: 10px; 
+      color: var(--gold-main); 
+      text-transform: uppercase; 
+      font-weight: 900; 
+      padding-left: 5px; 
+      letter-spacing: 1px;
+      text-shadow: 0 2px 4px rgba(220,163,69,0.1);
+    }
+
+   .input-g input, .input-g select { 
+      background: rgba(0,0,0,0.6); 
+      border: 2px solid #222; 
+      color: #fff; 
+      padding: 14px; 
+      font-size: 14px; 
+      border-radius: 12px; 
+      text-align: left; 
+      font-weight: 700; 
+      transition: 0.3s; 
+      width: 100%;
+    }
+
+    .input-g select option {
+      background-color: #121216; 
+      color: #ffffff; 
+      font-weight: 700;
+    }
+
+    .input-g input::placeholder {
+      color: #888;
+      font-weight: 500;
+      opacity: 0.7;
+    }
+
+    .input-g input:hover, 
+    .input-g select:hover {
+      border-color: #555;
+      background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3), 0 0 12px rgba(220,163,69,0.15);
+    }
+
+    .input-g input:focus, 
+    .input-g select:focus { 
+      border-color: var(--gold-main); 
+      outline: none; 
+      background: linear-gradient(135deg, rgba(220,163,69,0.08), rgba(220,163,69,0.04));
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.2), 0 0 20px rgba(220,163,69,0.35);
+      transform: translateY(-2px);
+    }
+
+    /* ========== SELECT CUSTOMIZADO ========== */
+    .custom-select {
+      position: relative;
+      width: 100%;
+    }
+
+    .custom-select select {
+      display: none; 
+    }
+
+    .select-selected {
+      background: rgba(0,0,0,0.6);
+      border: 2px solid #222;
+      color: #fff;
+      padding: 14px 18px; /* Adicionado padding para afastar da seta */
+      font-size: 14px;
+      border-radius: 12px;
+      text-align: left; /* Alinhado à esquerda para não esmagar */
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      user-select: none;
+    }
+
+    .select-selected:after {
+      content: "▼";
+      position: absolute;
+      right: 18px; /* Afastado da borda */
+      top: 16px;
+      font-size: 12px;
+      color: var(--gold-main);
+    }
+
+    .select-selected.select-arrow-active {
+      border-color: var(--gold-main);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      background: linear-gradient(135deg, rgba(220,163,69,0.08), rgba(220,163,69,0.04));
+    }
+    
+    .select-selected.select-arrow-active:after {
+      content: "▲";
+    }
+
+    .select-items {
+      position: absolute;
+      background-color: var(--panel-bg);
+      border: 2px solid var(--gold-main);
+      border-top: none;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+    }
+
+    .select-hide {
+      display: none;
+    }
+
+    .select-items div {
+      color: #fff;
+      padding: 12px 18px; /* Alinhamento consistente */
+      text-align: left;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      border-bottom: 1px solid #222;
+    }
+
+    .select-items div:last-child {
+      border-bottom: none;
+    }
+
+    .select-items div:hover, .same-as-selected {
+      background-color: rgba(220,163,69,0.2);
+      color: var(--gold-main);
+    }
+
+    /* ========== BOTÕES ========== */
+    .btn { 
+      background: linear-gradient(135deg, var(--gold-main), var(--gold-dark)); 
+      color: #000; 
+      border: none; 
+      padding: 16px 20px; 
+      font-size: 14px; 
+      font-weight: 900; 
+      border-radius: 14px; 
+      cursor: pointer; 
+      text-transform: uppercase; 
+      transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); 
+      width: 100%; 
+      box-shadow: 0 8px 20px rgba(220,163,69,0.3), inset 0 1px 0 rgba(255,255,255,0.2); 
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(220,163,69,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .btn:active:not(:disabled) { 
+      transform: translateY(-1px) scale(0.98);
+      box-shadow: 0 4px 12px rgba(220,163,69,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+
+    .btn:disabled { 
+      background: linear-gradient(135deg, #444, #333);
+      color: #666; 
+      cursor: not-allowed; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      opacity: 0.6;
+    }
+
+    .btn-sec { 
+      background: transparent; 
+      border: 2px solid var(--gold-main); 
+      color: var(--gold-main); 
+      box-shadow: 0 0 15px rgba(220,163,69,0.15), inset 0 0 10px rgba(220,163,69,0.08);
+      padding: 14px 18px;
+    }
+
+    .btn-sec:hover:not(:disabled) {
+      background: rgba(220,163,69,0.1);
+      box-shadow: 0 0 20px rgba(220,163,69,0.3), inset 0 0 10px rgba(220,163,69,0.15);
+    }
+
+    /* ========== SELETOR DE AVATARES ========== */
+    .av-wrap { 
+      width: 100%; 
+      overflow: hidden; 
+      padding: 8px; 
+      border-radius: 14px; 
+      background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+      border: 1px solid rgba(220,163,69,0.1);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .av-sel { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 10px; 
+      padding: 4px; 
+      width: 100%; 
+    }
+
+    .av-opt { 
+      font-size: 22px; 
+      width: 42px; 
+      height: 42px; 
+      flex-shrink: 0; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      border-radius: 50%; 
+      cursor: pointer; 
+      opacity: 0.4; 
+      transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); 
+      background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      margin: 0 auto;
+    }
+
+    .av-opt:hover:not(.locked) {
+      opacity: 0.7;
+      border-color: rgba(220,163,69,0.3);
+      transform: scale(1.08) translateY(-3px);
+      box-shadow: 0 6px 16px rgba(220,163,69,0.2);
+    }
+
+    .av-opt.sel { 
+      opacity: 1; 
+      border: 2px solid var(--gold-main); 
+      transform: scale(1.15) translateY(-6px); 
+      box-shadow: 0 8px 24px rgba(220,163,69,0.5), inset 0 0 12px rgba(220,163,69,0.2);
+      background: linear-gradient(135deg, rgba(220,163,69,0.15), rgba(220,163,69,0.08));
+    }
+
+    .av-opt.locked { 
+      opacity: 0.08; 
+      filter: grayscale(100%) blur(0.5px);
+      pointer-events: none; 
+      border-color: rgba(255,0,0,0.2);
+    }
+
+   /* ========== LISTA DE LOBBY ========== */
+    .lobby-list { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px; 
+      margin: 10px 0; 
+      text-align: left;
+    }
+
+    .lobby-p { 
+      display: flex; 
+      align-items: center; 
+      gap: 15px; /* Espaço entre avatar e nome */
+      background: rgba(0,0,0,0.5); 
+      padding: 12px 16px; /* <-- AQUI: 16px nas laterais dá o respiro perfeito! */
+      border-radius: 12px; 
+      border-left: 4px solid #333; /* <-- 4px deixa o traço do Host bem visível */
+      font-size: 16px; 
+      font-weight: bold;
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .lobby-p .av-opt {
+      margin: 0 !important; /* Força o avatar a colar na esquerda */
+      width: 44px;
+      height: 44px;
+      font-size: 24px;
+      flex-shrink: 0; /* <-- Adicione isso! Impede que o avatar encolha se o nome for grande */
+    }
+
+    .lobby-p.host { 
+      border-color: var(--gold-main); 
+    }
+    /* ========== LAYOUT DO JOGO ========== */
+    #game-ui { 
+      display: none; 
+      width: 100%; 
+      height: 100dvh; 
+      flex-direction: column; 
+      padding: 10px; 
+      gap: 10px; 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      box-sizing: border-box; 
+    }
+
+    .side-hud { 
+      width: 100%; 
+      background: var(--panel-bg); 
+      border: 2px solid var(--gold-main); 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 8px 15px; 
+      border-radius: 16px; 
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
+      flex-shrink: 0;
+    }
+
+    .hud-turn { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      font-size: 16px; 
+      font-weight: 900; 
+    }
+
+    .hud-av { 
+      font-size: 20px; 
+      width: 36px; 
+      height: 36px; 
+      background: #000; 
+      border-radius: 50%; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      border: 2px solid #fff; 
+    }
+
+    .hud-room { 
+      font-family: 'Playfair Display', serif; 
+      color: var(--gold-main); 
+      font-size: 14px; 
+      font-weight: 700; 
+      white-space: nowrap; 
+    }
+
+    /* ========== ÁREA DO TABULEIRO ========== */
+    #board-area { 
+      flex: none; 
+      width: 100%; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+    }
+
+    #board { 
+      display: grid; 
+      grid-template-columns: repeat(11, 1fr); 
+      grid-template-rows: repeat(11, 1fr); 
+      background: #000; 
+      gap: 2px; 
+      border: 3px solid var(--gold-main); 
+      border-radius: 24px; 
+      overflow: visible;
+      width: 100%; 
+      max-width: 1000px; 
+      aspect-ratio: 1/1; /* manter quadrado por padrão */
+      position: relative; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
+   /* 1. LARGURA DA COLUNA INTEIRA (Diminui o espaço que os cards ocupam na tela) */
+      #sidebar { 
+        width: 210px; /* coluna mais fina para alargar o tabuleiro */
+        min-width: 210px; 
+        max-width: 210px; 
+        flex-shrink: 0; 
+        display: flex; 
+        flex-direction: column; 
+        flex-wrap: nowrap; 
+        overflow-y: auto; 
+        padding-right: 5px;
+      } 
+      
+      /* Espaço entre um cartão e outro */
+      #p-list { display: flex; flex-direction: column; gap: 8px; }
+      
+      /* 2. A CAIXA DO JOGADOR EM SI */
+      .p-card { 
+        padding: 8px; /* <-- Diminui o espaço interno/gordura da caixa */
+        border-radius: 8px; 
+        gap: 4px;
+      }
+      
+      /* 3. TAMANHO DO AVATAR */
+      .p-av { 
+        width: 26px;  /* Largura da bolinha */
+        height: 26px; /* Altura da bolinha */
+        font-size: 14px; /* Tamanho do emoji */
+      }
+      
+      /* 4. TAMANHO DO NOME E DO DINHEIRO */
+      .p-info h3 { font-size: 11px; } /* Nome */
+      .p-money { font-size: 14px; }   /* Dinheiro */
+      
+      /* 5. INVENTÁRIO (As casinhas compradas que ficam embaixo do nome) */
+      .p-inventory { max-height: 80px; gap: 3px; padding-top: 4px; }
+      .inv-badge { font-size: 8px; padding: 2px 4px; }
+
+    /* ========== CÉLULAS DO TABULEIRO ========== */
+    .cell { 
+      background: var(--board-bg); 
+      display: flex; 
+      flex-direction: column; 
+      position: relative; 
+      border: 1px solid #1a1a20; 
+      overflow: hidden; 
+    }
+
+    .cell-corner { 
+      background: #0d0d12; 
+      justify-content: center; 
+      align-items: center; 
+    }
+
+    .cell-prop { 
+      justify-content: flex-start; 
+    }
+
+    .color-bar { 
+      width: 100%; 
+      height: 22%; 
+      min-height: 4px; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      border-bottom: 1px solid rgba(0,0,0,0.5); 
+      position: relative; 
+    }
+
+    .owner-bar { 
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 4px; 
+    }
+
+    /* ========== TIPOGRAFIA DO TABULEIRO ========== */
+    .prop-name { 
+      font-size: clamp(5px, 1.5vw, 10px); 
+      font-weight: 800; 
+      text-align: center; 
+      display: flex; 
+      flex: 1; 
+      align-items: center; 
+      justify-content: center; 
+      padding: 0 2px; 
+      color: #e0e0e0; 
+      line-height: 1.1; 
+      text-transform: uppercase; 
+      overflow: hidden; 
+      min-height: 0;
+    }
+
+    .prop-price { 
+      font-size: clamp(6px, 2vw, 12px); 
+      font-weight: 900; 
+      text-align: center; 
+      padding-bottom: 5px; 
+      color: var(--gold-light); 
+      flex-shrink: 0;
+    }
+
+    .corner-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  text-align: center;
+
+  font-size: clamp(7px, 1.2vw, 13px);
+  font-weight: 900;
+
+  line-height: 1.15;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+    .stars { 
+      position: absolute; 
+      font-size: 1.5vw; 
+      color: #fff; 
+      text-shadow: 0 0 2px #000; 
+      letter-spacing: 0.5px;
+    }
+
+    .logo { 
+      font-family: 'Playfair Display', serif; 
+      font-size: 10vw; 
+      color: var(--gold-main); 
+      text-align: center; 
+      line-height: 1; 
+      opacity: 0.1; 
+      position: absolute; 
+      top: 8%; 
+      pointer-events: none; 
+      width: 100%;
+    }
+
+    /* ========== DADOS E TOKENS ========== */
+    .die { 
+      width: 13vw; 
+      height: 12vw; 
+      background: #fff; 
+      border-radius: 2vw; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      font-size: 6vw; 
+      font-weight: 900; 
+      color: #000; 
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.5); 
+      transition: 0.1s; 
+    }
+
+    #b-roll { 
+      width: 85%; 
+      max-width: 200px; 
+      padding: 3vw; 
+      font-size: 3.5vw; 
+      z-index: 10; 
+      margin-top: 5px; 
+      border-radius: 3vw;
+    }
+
+    .token { 
+      position: absolute; 
+      width: 4vw; 
+      height: 4vw; 
+      border-radius: 50%; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      font-size: 2vw; 
+      background: #fff; 
+      border: 1.5px solid #000; 
+      z-index: 100; 
+      transition: top 0.25s linear, left 0.25s linear; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    }
+
+    .center-area { 
+      grid-column: 2 / 11; 
+      grid-row: 2 / 11; 
+      background: #0a0a0e; 
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+      gap: 10px; 
+      border-radius: 12px; 
+      position: relative; 
+      border: 1px solid #111;
+    }
+
+    .dice-container { 
+      display: flex; 
+      gap: 15px; 
+      z-index: 10; 
+    }
+
+    .die.rolling { 
+      animation: shake 0.2s infinite alternate; 
+    }
+
+    @keyframes shake { 
+      0% { transform: translateY(0) rotate(-20deg); } 
+      100% { transform: translateY(-10px) rotate(20deg); } 
+    }
+
+    /* ========== MODAIS ========== */
+    .modal { 
+      background: linear-gradient(135deg, var(--panel-bg), #0a0a0e);
+      border: 2px solid var(--gold-main); 
+      padding: clamp(20px, 4vw, 35px); 
+      border-radius: 24px; 
+      width: 90%; 
+      max-width: 420px; 
+      text-align: center; 
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(220,163,69,0.1); 
+      backdrop-filter: blur(8px);
+      animation: modalPop 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    @keyframes modalPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal h2 { 
+      color: var(--gold-main); 
+      margin-bottom: 15px; 
+      font-size: clamp(18px, 4vw, 26px); 
+      text-shadow: 0 4px 12px rgba(220,163,69,0.2);
+      letter-spacing: 0.5px;
+    }
+
+    .modal p { 
+      font-size: clamp(13px, 3vw, 15px); 
+      margin-bottom: 25px; 
+      line-height: 1.6; 
+      color: #ddd; 
+    }
+
+    .modal p b { 
+      color: var(--gold-light); 
+      font-weight: 900;
+    }
+
+    .m-btns { 
+      display: flex; 
+      gap: 10px; 
+      flex-direction: column; 
+    }
+
+    /* ========== RESPONSIVE - DESKTOP (TABULEIRO WIDESCREEN) ========== */
+    @media (min-width: 1024px) { 
+      #game-ui { 
+        flex-direction: row; 
+        align-items: stretch; 
+        padding: 20px; 
+        gap: 30px; 
+        height: 100dvh; 
+      } 
+      
+      #board-area { 
+        flex: 2; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100%; 
+        min-width: 10px; 
+        min-height: 15px; 
+      } 
+      
+      /* TABULEIRO EXPANDIDO E ALARGADO! */
+      #board { 
+        height: 100%; 
+        width: auto; 
+        aspect-ratio: 1.25 / 1; /* Transforma o quadrado em retângulo largo */
+        max-width: calc(100vw - 300px); /* Mais espaço para o tabuleiro reduzindo a margem da sidebar */
+        max-height: calc(100vh - 40px); 
+        border-width: 4px; 
+        border-radius: 20px; 
+        gap: 3px; 
+        flex-shrink: 0; 
+      }
+      
+      /* 1. LARGURA DA COLUNA INTEIRA */
+      #sidebar { 
+        width: 180px; /* reduzir para dar mais largura ao tabuleiro */
+        min-width: 180px; 
+        max-width: 120px; 
+        flex-shrink: 0; 
+        display: flex; 
+        flex-direction: column; 
+        flex-wrap: nowrap; 
+        overflow-y: auto; 
+        padding-right: 5px;
+      } 
+      
+      #p-list { display: flex; flex-direction: column; gap: 10px; }
+      
+      /* 2. A CAIXINHA DO JOGADOR (BEM DEFINIDA E ELEGANTE) */
+      .p-card { 
+        background: #111115; /* Fundo que destaca a caixa do fundo preto */
+        border: 2px solid #333; /* Borda cinza para desenhar a caixa */
+        padding: 10px; /* Espaço interno para o texto não colar na borda */
+        border-radius: 12px; /* Deixa os cantos da caixa arredondados */
+        display: flex; 
+        flex-direction: column; 
+        gap: 6px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.8); /* Sombra para dar volume de "cartão" */
+      }
+
+      /* CAIXINHA DE QUEM ESTÁ JOGANDO AGORA (BRILHA EM DOURADO) */
+      .p-card.act {
+        border: 2px solid var(--gold-main); /* Borda dourada forte */
+        background: linear-gradient(135deg, #1a1a24, #0f0f14);
+        box-shadow: 0 4px 15px rgba(220,163,69,0.2);
+      }
+      
+    /* 3. TAMANHO DO AVATAR E NOME NA MESMA LINHA */
+      .p-card-top { display: flex; align-items: center; gap: 10px; }
+      
+      .p-av { 
+        width: 32px;  
+        height: 32px; 
+        font-size: 16px; 
+        border: 2px solid #444; /* Bordinha no avatar também */
+        border-radius: 50%; /* <-- A MÁGICA PARA DEIXAR REDONDO AQUI! (50% faz um círculo perfeito) */
+        display: flex; /* Essas 3 linhas de baixo garantem que o emoji fique bem no centro da bolinha */
+        justify-content: center; 
+        align-items: center; 
+        flex-shrink: 0; /* Impede que a bolinha seja esmagada e vire um ovo */
+      }
+      
+      /* 4. TEXTOS DENTRO DA CAIXA */
+      .p-info { display: flex; flex-direction: column; overflow: hidden; }
+      .p-info h3 { font-size: 12px; margin: 0; color: #ccc; }
+      .p-card.act .p-info h3 { color: #fff; font-weight: 900; }
+      .p-money { font-size: 16px; font-weight: 900; color: #4CAF50; margin-top: 2px; }
+      
+      /* 5. INVENTÁRIO (Fica dentro da caixa, abaixo de uma linha divisória) */
+      .p-inventory { 
+        max-height: 80px; 
+        gap: 4px; 
+        padding-top: 8px; 
+        border-top: 1px solid #333; /* Cria uma linha separando o nome das posses */
+      }
+      .p-card.act .p-inventory { border-color: rgba(220,163,69,0.3); } /* Linha fica dourada no turno dele */
+      .inv-badge { font-size: 9px; padding: 3px 5px; border-radius: 4px; }
+
+      /* Textos recalculados para as casas retangulares mais largas */
+      .prop-name { 
+        font-size: clamp(8px, 1.2vw, 13px); 
+        padding: 4px; 
+        line-height: 1.2;
+      }
+
+      .prop-price { 
+        font-size: clamp(9px, 1.3vw, 15px); 
+        padding-bottom: 6px; 
+      }
+
+      .corner-text { 
+        font-size: clamp(10px, 1.5vw, 16px); 
+      }
+
+      .stars { 
+        font-size: 1.3vh; 
+      }
+
+      .logo { 
+        font-size: 8vh; 
+        top: 12%;
+      }
+
+      .die { 
+        width: 8vh; 
+        height: 8vh; 
+        border-radius: 1.5vh; 
+        font-size: 4vh;
+      }
+
+      #b-roll { 
+        padding: 1.5vh 3vh; 
+        font-size: 1.8vh; 
+        border-radius: 2vh; 
+        margin-top: 10px;
+      }
+
+      .token { 
+        width: 3.5vh; 
+        height: 3.5vh; 
+        font-size: 2vh; 
+        border: 3px solid #000;
+      }
+    }
+    .corner-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  font-weight: 900;
+  padding: 6px;
+  text-align: center;
+}
+
+.tax-value {
+  color: #F44336;
+  font-size: clamp(8px, 1.5vw, 14px);
+}
+.prop-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 4px;
+  text-align: center;
+
+  font-size: clamp(6px, 1.1vw, 12px);
+  font-weight: 800;
+
+  line-height: 1.15;
+  word-break: break-word;
+  overflow-wrap: break-word;
+
+  min-height: 0;
+}
+/* Cantos arredondados reais */
+#c-0 { border-top-left-radius: 20px; }
+#c-10 { border-top-right-radius: 20px; }
+#c-20 { border-bottom-right-radius: 20px; }
+#c-30 { border-bottom-left-radius: 20px; }
+
+
+  </style>
+</head>
+<body>
+
+<div class="screen active" id="sc-profile">
+    <div class="box">
+        <h1 class="title">PERFIL</h1>
+        <div class="subtitle">Identifique-se no mercado</div>
+        <div class="input-g">
+            <label>Assinatura (Nome)</label>
+            <input type="text" id="my-name" value="Magnata" maxlength="10" spellcheck="false">
+        </div>
+        <div class="input-g">
+            <label>Selecione seu Avatar</label>
+            <div class="av-wrap">
+                <div class="av-sel" id="my-avs">
+                    <div class="av-opt sel" onclick="selAv('👨‍🍳')">👨‍🍳</div>
+                    <div class="av-opt" onclick="selAv('👩‍🍳')">👩‍🍳</div>
+                    <div class="av-opt" onclick="selAv('🧇')">🧇</div>
+                    <div class="av-opt" onclick="selAv('🍷')">🍷</div>
+                    <div class="av-opt" onclick="selAv('🎩')">🎩</div>
+                    <div class="av-opt" onclick="selAv('🍔')">🍔</div>
+                    <div class="av-opt" onclick="selAv('🍣')">🍣</div>
+                    <div class="av-opt" onclick="selAv('🍩')">🍩</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn" onclick="goToHub()">Acessar Hub</button>
+    </div>
+</div>
+
+<div class="screen" id="sc-hub">
+    <div class="box hub-box">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <h2 class="title" style="font-size:20px;">CRIAR IMPÉRIO</h2>
+            <div class="input-g"><input type="text" id="host-name" maxlength="10" placeholder="Nome da Sala (Opcional)"></div>
+            <div class="input-g"><input type="text" id="host-pass" maxlength="8" placeholder="Senha (Opcional)"></div>
+            <div style="display:flex; gap:10px;">
+                <div class="input-g" style="flex:1;">
+                    <div class="custom-select">
+                      <select id="host-money">
+                          <option value="1500">Capital: $1.5k</option>
+                          <option value="2500" selected>Capital: $2.5k</option>
+                          <option value="5000">Capital: $5k</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="input-g" style="flex:1;">
+                    <div class="custom-select">
+                      <select id="host-max">
+                          <option value="2">2 Jog.</option>
+                          <option value="4">4 Jog.</option>
+                          <option value="6" selected>6 Jog.</option>
+                      </select>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" onclick="createRoom()" id="btn-create">Abrir Capital</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px; justify-content:center; border-top: 2px solid #222; padding-top: 15px;">
+            <h2 class="title" style="font-size:20px;">ENTRAR</h2>
+            <div class="input-g"><input type="text" id="join-code" maxlength="10" placeholder="Código da Sala"></div>
+            <div class="input-g"><input type="password" id="join-pass" maxlength="8" placeholder="Senha (Se houver)"></div>
+            <button class="btn btn-sec" id="btn-connect" onclick="joinRoom()">Conectar</button>
+            <button class="btn btn-sec" style="border-color:#333; color:#888;" onclick="show('sc-profile')">Voltar</button>
+        </div>
+    </div>
+</div>
+
+<div class="screen" id="sc-lobby">
+    <div class="box">
+        <h1 class="title">SALA: <span id="lb-code" style="color:#fff"></span></h1>
+        <div class="lobby-list" id="lb-players"></div>
+        <button class="btn" id="btn-start" style="display:none;" onclick="hostStartGame()">Iniciar Jogo</button>
+        <div id="lb-wait" style="color:var(--gold-main); font-weight:bold; font-size:12px; display:none;">Aguardando Host...</div>
+        <button class="btn btn-sec" style="margin-top:5px;" onclick="uiLeave()">Sair</button>
+    </div>
+</div>
+
+<div id="game-ui">
+    <div id="board-area">
+        <div id="board">
+            <div class="center-area">
+                <div class="logo">IMPÉRIO<br>GOURMET</div>
+                <div class="dice-container"><div class="die" id="d1">1</div><div class="die" id="d2">1</div></div>
+                <button class="btn" id="b-roll" onclick="sendAction({type:'ROLL'})" disabled>Rolar Dados</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="sidebar">
+        <div id="p-list"></div>
+    </div>
+</div>
+
+<div class="screen" id="sc-modal">
+    <div class="modal">
+        <h2 id="m-title"></h2>
+        <p id="m-desc"></p>
+        <div class="m-btns" id="m-btns"></div>
+    </div>
+</div>
+
+<script>
+  /* ========== CONFIG E DADOS DO JOGO ========== */
+  const conf = [
+    { t: 'c', n: 'INÍCIO', g: '1/1' },
+    { t: 'p', n: 'Pastel do Madruga', pr: 60, al: [2, 10, 30, 90], up: 50, c: 'var(--c-brown)', g: '1/2' },
+    { t: 'e', n: 'SORTE OU<br>REVÉS', g: '1/3' },
+    { t: 'p', n: 'Dogão do Bigode', pr: 60, al: [4, 20, 60, 150], up: 50, c: 'var(--c-brown)', g: '1/4' },
+    { t: 'x', n: 'Alvará Prefeita', val: 200, g: '1/5' },
+    { t: 'p', n: 'Aikifome', pr: 200, al: [25, 50, 100, 200], up: 0, c: 'var(--c-special)', g: '1/6' },
+    { t: 'p', n: 'OkaBerry', pr: 100, al: [6, 30, 90, 250], up: 50, c: 'var(--c-lblue)', g: '1/7' },
+    { t: 'e', n: 'SORTE OU<br>REVÉS', g: '1/8' },
+    { t: 'p', n: 'Six Guys', pr: 100, al: [6, 30, 90, 250], up: 50, c: 'var(--c-lblue)', g: '1/9' },
+    { t: 'p', n: 'Taco Bom', pr: 120, al: [8, 40, 100, 300], up: 50, c: 'var(--c-lblue)', g: '1/10' },
+    { t: 'c', n: 'Vigilância<br>Sanitária', g: '1/11' },
+    { t: 'p', n: 'Trigo de Prata', pr: 140, al: [10, 50, 150, 450], up: 100, c: 'var(--c-pink)', g: '2/11' },
+    { t: 'p', n: 'HortiFruty', pr: 150, al: [15, 30, 60, 120], up: 0, c: 'var(--c-special)', g: '3/11' },
+    { t: 'p', n: 'StarBux', pr: 140, al: [10, 50, 150, 450], up: 100, c: 'var(--c-pink)', g: '4/11' },
+    { t: 'p', n: 'Kakau show', pr: 160, al: [12, 60, 180, 500], up: 100, c: 'var(--c-pink)', g: '5/11' },
+    { t: 'p', n: 'Rappida', pr: 200, al: [25, 50, 100, 200], up: 0, c: 'var(--c-special)', g: '6/11' },
+    { t: 'p', n: 'Bate leite', pr: 180, al: [14, 70, 200, 550], up: 100, c: 'var(--c-orange)', g: '7/11' },
+    { t: 'e', n: 'SORTE OU<br>REVÉS', g: '8/11' },
+    { t: 'p', n: 'Pub da Buduvieser', pr: 180, al: [14, 70, 200, 550], up: 100, c: 'var(--c-orange)', g: '9/11' },
+    { t: 'p', n: 'Bar da cerveja', pr: 200, al: [16, 80, 220, 600], up: 100, c: 'var(--c-orange)', g: '10/11' },
+    { t: 'c', n: 'Parada<br>de<br>descanso', g: '11/11' },
+    { t: 'p', n: 'McRonalds', pr: 220, al: [18, 90, 250, 700], up: 150, c: 'var(--c-red)', g: '11/10' },
+    { t: 'e', n: 'SORTE OU<br>REVÉS', g: '11/9' },
+    { t: 'p', n: 'Burguer queen', pr: 220, al: [18, 90, 250, 700], up: 150, c: 'var(--c-red)', g: '11/8' },
+    { t: 'p', n: 'Recheio e madeira', pr: 240, al: [20, 100, 300, 750], up: 150, c: 'var(--c-red)', g: '11/7' },
+    { t: 'p', n: 'Uéber Eats', pr: 200, al: [25, 50, 100, 200], up: 0, c: 'var(--c-special)', g: '11/6' },
+    { t: 'p', n: 'OutBeck', pr: 260, al: [22, 110, 330, 800], up: 150, c: 'var(--c-yellow)', g: '11/5' },
+    { t: 'p', n: 'Coco Bambolê', pr: 260, al: [22, 110, 330, 800], up: 150, c: 'var(--c-yellow)', g: '11/4' },
+    { t: 'p', n: 'Viño sol', pr: 150, al: [15, 30, 60, 120], up: 0, c: 'var(--c-special)', g: '11/3' },
+    { t: 'p', n: 'Brasa de teto', pr: 280, al: [24, 120, 360, 850], up: 150, c: 'var(--c-yellow)', g: '11/2' },
+    { t: 'c', n: 'Inspeção', g: '11/1' },
+    { t: 'p', n: 'Fazemos', pr: 300, al: [26, 130, 390, 900], up: 200, c: 'var(--c-green)', g: '10/1' },
+    { t: 'p', n: 'Paris 9', pr: 300, al: [26, 130, 390, 900], up: 200, c: 'var(--c-green)', g: '9/1' },
+    { t: 'e', n: 'SORTE OU<br>REVÉS', g: '8/1' },
+    { t: 'p', n: 'Mistreal', pr: 320, al: [28, 150, 450, 1000], up: 200, c: 'var(--c-green)', g: '7/1' },
+    { t: 'p', n: 'José Entregas', pr: 200, al: [25, 50, 100, 200], up: 0, c: 'var(--c-special)', g: '6/1' },
+    { t: 'e', n: 'SORTE OU<br>REVÉS', g: '5/1' },
+    { t: 'p', n: 'Sushi Nobú Prime', pr: 350, al: [35, 175, 500, 1100], up: 200, c: 'var(--c-blue)', g: '4/1' },
+    { t: 'x', n: 'Imposto Luxo', val: 100, g: '3/1' },
+    { t: 'p', n: 'Lassai', pr: 400, al: [50, 200, 600, 1400], up: 200, c: 'var(--c-blue)', g: '2/1' }
+  ];
+
+  const evs = [
+    { t: 'g', v: 150, d: "O crítico Michelin elogiou seu prato! Receba $150." }, 
+    { t: 'l', v: 100, d: "Terremoto! Quebrou taças de cristal. Pague $100." },
+    { t: 'g', v: 200, d: "Investidor Anjo fez um PIX de $200." }, 
+    { t: 'l', v: 150, d: "Inflação! Cimento subiu. Pague $150." },
+    { t: 'g', v: 300, d: "Prêmio: Melhor Chef do Ano! Ganhe $300." }, 
+    { t: 'l', v: 200, d: "Crise de Crédito no mercado! Pague $200." },
+    { t: 'g', v: 250, d: "Bolha Imobiliária! Seu bairro é o novo hype. +$250." }, 
+    { t: 'l', v: 100, d: "Gentrificação afastou clientes. Pague $100." },
+    { t: 'g', v: 200, d: "Herança! Seu tio deixou barras de ouro. +$200." }, 
+    { t: 'l', v: 250, d: "Quebra da Bolsa! Pague $250 ao banco." },
+    { t: 'g', v: 150, d: "Subsídio Gov! Programa Minha Cozinha. +$150." }, 
+    { t: 'l', v: 150, d: "Máquinas de Cartão fora do ar! Pague $150." },
+    { t: 'g', v: 100, d: "Cartão Black aprovado sem anuidade. Receba $100." }, 
+    { t: 'l', v: 200, d: "Contador desviou verba para o tigrinho. Pague $200." },
+    { t: 'g', v: 200, d: "Reality Show gravou na sua rua hoje. +$200." }, 
+    { t: 'l', v: 150, d: "Embargo de Obra por achar vaso antigo. Multa de $150." },
+    { t: 'g', v: 150, d: "Sorte no Leilão de geladeiras inox. +$150." }, 
+    { t: 'l', v: 200, d: "Auditoria Fiscal do Governo! Pague $200." },
+    { t: 'm', v: 16, d: "Tornado Gastronômico! O vento te jogou na Gelateria!" }
+  ];
+
+  const colors = ['var(--c-p1)', 'var(--c-p2)', 'var(--c-p3)', 'var(--c-p4)', 'var(--c-p5)', 'var(--c-p6)'];
+  const upN = ['Reforma Básica', 'Cozinha Premium', 'Estrela Michelin 🌟'];
+
+  /* ========== VARIÁVEIS GLOBAIS ========== */
+  let myAv = '👨‍🍳', myName = 'Magnata', myId = null, isHost = false, peer = null, conns = [], roomId = '', rPass = '';
+  let gs = { st: 'LOBBY', ps: [], props: [], turn: 0, d1: 1, d2: 1, modal: null, cfg: { cash: 2500, max: 6 } };
+  let connectTimeout = null;
+
+  /* ========== SCRIPT DO SELECT CUSTOMIZADO ========== */
+  function setupCustomSelects() {
+    var x, i, j, l, ll, selElmnt, a, b, c;
+    x = document.getElementsByClassName("custom-select");
+    l = x.length;
+    for (i = 0; i < l; i++) {
+      selElmnt = x[i].getElementsByTagName("select")[0];
+      ll = selElmnt.length;
+      a = document.createElement("DIV");
+      a.setAttribute("class", "select-selected");
+      a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+      x[i].appendChild(a);
+      b = document.createElement("DIV");
+      b.setAttribute("class", "select-items select-hide");
+      for (j = 0; j < ll; j++) {
+        c = document.createElement("DIV");
+        c.innerHTML = selElmnt.options[j].innerHTML;
+        c.addEventListener("click", function(e) {
+            var y, i, k, s, h, sl, yl;
+            s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+            sl = s.length;
+            h = this.parentNode.previousSibling;
+            for (i = 0; i < sl; i++) {
+              if (s.options[i].innerHTML == this.innerHTML) {
+                s.selectedIndex = i;
+                h.innerHTML = this.innerHTML;
+                y = this.parentNode.getElementsByClassName("same-as-selected");
+                yl = y.length;
+                for (k = 0; k < yl; k++) {
+                  y[k].removeAttribute("class");
+                }
+                this.setAttribute("class", "same-as-selected");
+                break;
+              }
+            }
+            h.click();
+        });
+        b.appendChild(c);
+      }
+      x[i].appendChild(b);
+      a.addEventListener("click", function(e) {
+          e.stopPropagation();
+          closeAllSelect(this);
+          this.nextSibling.classList.toggle("select-hide");
+          this.classList.toggle("select-arrow-active");
+      });
+    }
+  }
+
+  function closeAllSelect(elmnt) {
+    var x, y, i, xl, yl, arrNo = [];
+    x = document.getElementsByClassName("select-items");
+    y = document.getElementsByClassName("select-selected");
+    xl = x.length;
+    yl = y.length;
+    for (i = 0; i < yl; i++) {
+      if (elmnt == y[i]) {
+        arrNo.push(i)
+      } else {
+        y[i].classList.remove("select-arrow-active");
+      }
+    }
+    for (i = 0; i < xl; i++) {
+      if (arrNo.indexOf(i)) {
+        x[i].classList.add("select-hide");
+      }
+    }
+  }
+
+  document.addEventListener("click", closeAllSelect);
+  window.addEventListener('DOMContentLoaded', setupCustomSelects);
+
+  /* ========== EVENTOS DO NAVEGADOR ========== */
+  window.addEventListener('beforeunload', (e) => {
+    if (gs.st !== 'LOBBY' && document.getElementById('game-ui').style.display === 'flex') {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  window.addEventListener('unload', () => { 
+    if(peer) peer.destroy(); 
+  });
+
+  /* ========== FUNÇÕES DE INTERFACE ========== */
+  function selAv(e) {
+    document.querySelectorAll('.av-opt').forEach(el => el.classList.remove('sel'));
+    event.target.classList.add('sel');
+    myAv = e;
+  }
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function goToHub() {
+    myName = document.getElementById('my-name').value.trim() || 'Magnata';
+    show('sc-hub');
+  }
+
+  function uiBack() {
+    show('sc-hub');
+    document.getElementById('btn-connect').disabled = false;
+    document.getElementById('btn-connect').innerText = "Conectar";
+    document.getElementById('btn-create').disabled = false;
+    document.getElementById('btn-create').innerText = "Abrir Capital";
+    if (connectTimeout) clearTimeout(connectTimeout);
+  }
+
+  function uiLeave() {
+    if (isHost) { conns.forEach(c => c.close()); }
+    if (peer) { 
+        peer.destroy(); 
+        peer = null; 
+    }
+    uiBack();
+  }
+
+  /* ========== FUNÇÕES DE SALA ========== */
+  function createRoom() {
+    const raw = document.getElementById('host-name').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    roomId = raw.length > 0 ? raw : Math.random().toString(36).substring(2, 6).toUpperCase();
+    rPass = document.getElementById('host-pass').value.trim();
+    gs.cfg.cash = parseInt(document.getElementById('host-money').value);
+    gs.cfg.max = parseInt(document.getElementById('host-max').value);
+    document.getElementById('btn-create').disabled = true;
+    document.getElementById('btn-create').innerText = "Processando...";
+    isHost = true;
+    initPeer(roomId);
+  }
+
+  function joinRoom() {
+    const raw = document.getElementById('join-code').value.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (raw.length < 1) return alert("Digite um código válido.");
+    roomId = raw;
+    rPass = document.getElementById('join-pass').value.trim();
+    document.getElementById('btn-connect').disabled = true;
+    document.getElementById('btn-connect').innerText = "Verificando...";
+    isHost = false;
+    initPeer();
+    connectTimeout = setTimeout(() => {
+      alert("Império não encontrado ou a conexão falhou.");
+      uiBack();
+    }, 8000);
+  }
+
+  /* ========== PEER CONNECTION ========== */
+  function initPeer(idStr) {
+    peer = new Peer(idStr ? 'IG-' + idStr : undefined);
+    peer.on('open', id => {
+      myId = id;
+      if (!isHost) {
+        const conn = peer.connect('IG-' + roomId, { metadata: { p: rPass, n: myName, a: myAv }, reliable: true });
+        conn.on('open', () => {
+          if (connectTimeout) clearTimeout(connectTimeout);
+          conns.push(conn);
+          setupConn(conn);
+        });
+      } else {
+        show('sc-lobby');
+        document.getElementById('lb-code').innerText = roomId;
+        document.getElementById('btn-start').style.display = 'block';
+        addPlayerToState(myId, myName, myAv);
+      }
+    });
+
+    peer.on('error', err => {
+      if (err.type === 'network' || err.type === 'disconnected' || err.type === 'server-error') return;
+      if (connectTimeout) clearTimeout(connectTimeout);
+      if (err.type === 'peer-unavailable') alert('Sala inexistente ou código incorreto!');
+      else alert('Erro fatal: ' + err.type);
+      uiBack();
+    });
+
+    if (isHost) {
+      peer.on('connection', conn => {
+        conn.on('open', () => {
+          const incPass = (conn.metadata && conn.metadata.p) ? conn.metadata.p : '';
+          if (gs.st !== 'LOBBY' || gs.ps.length >= gs.cfg.max) {
+            conn.send({ type: 'REJ', m: 'Sala cheia/em jogo.' });
+            setTimeout(() => conn.close(), 500);
+            return;
+          }
+          if (rPass !== '' && incPass !== rPass) {
+            conn.send({ type: 'REJ', m: 'Senha Incorreta!' });
+            setTimeout(() => conn.close(), 500);
+            return;
+          }
+          conns.push(conn);
+          setupConn(conn);
+          addPlayerToState(conn.peer, conn.metadata.n, conn.metadata.a);
+        });
+      });
+    }
+  }
+
+  function setupConn(conn) {
+    conn.on('data', data => {
+      if (data.type === 'REJ') {
+        if (connectTimeout) clearTimeout(connectTimeout);
+        alert(data.m);
+        uiBack();
+      } else if (isHost) {
+        processAction(conn.peer, data);
+      } else if (data.type === 'SYNC') {
+        if (!document.getElementById('sc-lobby').classList.contains('active') && gs.st === 'LOBBY') {
+          show('sc-lobby');
+          document.getElementById('lb-code').innerText = roomId;
+          document.getElementById('lb-wait').style.display = 'block';
+        }
+        gs = data.state;
+        render();
+      }
+    });
+    conn.on('close', () => {
+      if (isHost) {
+        gs.ps = gs.ps.filter(p => p.id !== conn.peer);
+        broadcast();
+      } else {
+        alert("Conexão perdida com Host.");
+        uiBack();
+      }
+    });
+  }
+
+  function broadcast() {
+    if (isHost) conns.forEach(c => c.send({ type: 'SYNC', state: gs }));
+    render();
+  }
+
+  function sendAction(act) {
+    act.pid = myId;
+    if (isHost) processAction(myId, act);
+    else conns[0].send(act);
+  }
+
+  /* ========== FUNÇÕES DE JOGADOR ========== */
+  function addPlayerToState(pid, pName, pAv) {
+    let finalAv = pAv;
+    if (gs.ps.some(p => p.av === finalAv)) {
+      const allAvs = ['👨‍🍳', '👩‍🍳', '🧇', '🍷', '🎩', '🍔', '🍣', '🍩'];
+      for (let a of allAvs) {
+        if (!gs.ps.some(p => p.av === a)) {
+          finalAv = a;
+          break;
+        }
+      }
+    }
+    gs.ps.push({ 
+      id: pid, 
+      name: pName || 'Magnata', 
+      av: finalAv, 
+      color: colors[gs.ps.length], 
+      money: gs.cfg.cash, 
+      pos: 0, 
+      faliu: false, 
+      inJail: false 
+    });
+    broadcast();
+  }
+
+  function hostStartGame() {
+    if (gs.ps.length < 2) return alert('Mín. 2 investidores.');
+    gs.st = 'IDLE';
+    conf.forEach(c => gs.props.push({ dono: null, lvl: 0 }));
+    broadcast();
+  }
+
+  /* ========== LÓGICA DO JOGO ========== */
+  function processAction(pid, act) {
+    const pIdx = gs.ps.findIndex(p => p.id === pid);
+    if (pIdx < 0) return;
+    const p = gs.ps[pIdx];
+
+    if (act.type === 'ROLL' && gs.st === 'IDLE' && pIdx === gs.turn) {
+      gs.st = 'ROLLING';
+      gs.modal = null;
+      gs.d1 = Math.floor(Math.random() * 6) + 1;
+      gs.d2 = Math.floor(Math.random() * 6) + 1;
+      broadcast();
+
+      setTimeout(() => {
+        if (p.inJail) {
+          if (gs.d1 === gs.d2) {
+            p.inJail = false;
+            startMoveAnimation(p, gs.d1 + gs.d2);
+          } else {
+            gs.modal = {
+              t: 'Vigilância Sanitária',
+              d: `Falta de higiene. Dados: ${gs.d1} e ${gs.d2}. Propina exigida.`,
+              b: ['Pagar $50']
+            };
+            broadcast();
+          }
+        } else {
+          startMoveAnimation(p, gs.d1 + gs.d2);
+        }
+      }, 500);
+    } else if (act.type === 'MODAL_ACT' && pIdx === gs.turn && gs.modal) {
+      handleModalAction(p, act.idx);
+    }
+  }
+
+  async function startMoveAnimation(p, steps) {
+    for (let i = 0; i < steps; i++) {
+      p.pos++;
+      if (p.pos > 39) {
+        p.pos -= 40;
+        p.money += 200;
+      }
+      broadcast();
+      await new Promise(r => setTimeout(r, 250));
+    }
+    setTimeout(() => resolveCell(p), 200);
+  }
+
+  function resolveCell(p) {
+    const c = conf[p.pos];
+
+    if (c.t === 'p') {
+      const pr = gs.props[p.pos];
+      if (!pr.dono) {
+        if (p.money >= c.pr) {
+          showM('Oportunidade', `Adquirir escritura de <b>${c.n}</b> por $${c.pr}?`, ['Comprar', 'Ignorar']);
+        } else {
+          showM('Sem Capital', `Você não possui $${c.pr} para <b>${c.n}</b>.`, ['Compreendido']);
+        }
+      } else if (pr.dono === p.id) {
+        if (pr.lvl < 3 && c.up > 0 && p.money >= c.up) {
+          showM('Melhoria', `Evoluir para <b>${upN[pr.lvl]}</b> por $${c.up}?<br><br>Aluguel: $${c.al[pr.lvl]} ➔ $${c.al[pr.lvl + 1]}`, ['Investir', 'Não Agora']);
+        } else if (pr.lvl === 3) {
+          showM('Chef Supremo', `<b>${c.n}</b> atingiu o ápice com 3 Estrelas Michelin!`, ['Incrível']);
+        } else {
+          nextTurn();
+        }
+      } else {
+        const d = gs.ps.find(x => x.id === pr.dono);
+        pagar(p, d, c.al[pr.lvl], `Aluguel consumido em ${c.n}`);
+      }
+    } else if (c.t === 'x') {
+      pagar(p, null, c.val, c.n);
+    } else if (c.t === 'e') {
+      const ev = evs[Math.floor(Math.random() * evs.length)];
+      if (ev.t === 'g') {
+        p.money += ev.v;
+        showM('Sorte', ev.d, ['Coletar']);
+      } else if (ev.t === 'm') {
+        p.pos = ev.v;
+        showM('Tornado', ev.d, ['Ir']);
+      } else {
+        pagar(p, null, ev.v, `Revés<br><br>${ev.d}`);
+      }
+    } else if (c.n === 'INSPEÇÃO') {
+      p.pos = 10;
+      p.inJail = true;
+      showM('Interditado', 'Vigilância lacrou tudo. Você foi conduzido.', ['Aceitar']);
+    } else {
+      nextTurn();
+    }
+  }
+
+  function pagar(pag, rec, v, mot) {
+    if (pag.money >= v) {
+      pag.money -= v;
+      if (rec) rec.money += v;
+      showM(rec ? 'Acerto' : 'Dedução', `${mot}<br><br><b>Débito: $${v}</b>`, ['Pagar']);
+    } else {
+      showM('FALÊNCIA', `Faltou liquidez para cobrir $${v}!`, ['Falir']);
+    }
+  }
+
+  function showM(t, d, b) {
+    gs.modal = { t, d, b };
+    broadcast();
+  }
+
+  function handleModalAction(p, i) {
+    const m = gs.modal;
+    let pass = true;
+
+    if (m.t === 'Oportunidade' && i === 0) {
+      p.money -= conf[p.pos].pr;
+      gs.props[p.pos].dono = p.id;
+    }
+    if (m.t === 'Melhoria' && i === 0) {
+      p.money -= conf[p.pos].up;
+      gs.props[p.pos].lvl++;
+    }
+    if (m.t === 'FALÊNCIA') {
+      p.faliu = true;
+      p.inJail = false;
+      gs.props.forEach(pr => {
+        if (pr.dono === p.id) {
+          pr.dono = null;
+          pr.lvl = 0;
+        }
+      });
+    }
+    if (m.t === 'Vigilância Sanitária' && i === 0) {
+      p.money -= 50;
+      p.inJail = false;
+    }
+    if (m.t === 'Tornado') {
+      pass = false;
+      resolveCell(p);
+    }
+    if (pass) nextTurn();
+  }
+
+  function nextTurn() {
+    gs.modal = null;
+    do {
+      gs.turn = (gs.turn + 1) % gs.ps.length;
+    } while (gs.ps[gs.turn].faliu);
+    gs.st = 'IDLE';
+    broadcast();
+  }
+
+  /* ========== RENDERIZAÇÃO ========== */
+  function render() {
+    if (gs.st === 'LOBBY') {
+      const used = gs.ps.map(p => p.av);
+      document.querySelectorAll('.av-opt').forEach(el => {
+        if (used.includes(el.innerText) && myAv !== el.innerText) {
+          el.classList.add('locked');
+        } else {
+          el.classList.remove('locked');
+        }
+      });
+
+      const lb = document.getElementById('lb-players');
+      lb.innerHTML = '';
+      gs.ps.forEach(p => {
+        lb.innerHTML += `<div class="lobby-p ${p.id === gs.ps[0].id ? 'host' : ''}"><div class="av-opt sel" style="border-color:${p.color}; opacity:1;">${p.av}</div><b>${p.name}</b></div>`;
+      });
+      return;
+    }
+
+    document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
+    document.getElementById('game-ui').style.display = 'flex';
+
+    const board = document.getElementById('board');
+    if (board.children.length === 1) {
+      conf.forEach((c, i) => {
+        const d = document.createElement('div');
+        d.className = c.t === 'c' ? 'cell cell-corner' : 'cell cell-prop';
+        const [r, col] = c.g.split('/');
+        d.style.gridRow = r;
+        d.style.gridColumn = col;
+        d.id = `c-${i}`;
+
+        if (c.t === 'p') {
+          d.innerHTML = `<div class="color-bar" style="background:${c.c}"><div class="stars" id="s-${i}"></div></div><div class="prop-name">${c.n}</div><div class="prop-price">$${c.pr}</div><div class="owner-bar" id="o-${i}"></div>`;
+        } else if (c.t === 'x') {
+            d.innerHTML = `<div class="corner-text"><div>${c.n}</div><div class="tax-value">-$${c.val}</div></div>`;
+} else {
+          d.innerHTML = `<div class="corner-text" style="${c.t === 'e' ? 'color:var(--gold-main)' : ''}">${c.n}</div>`;
+        }
+        board.appendChild(d);
+      });
+    }
+
+    gs.props.forEach((pr, i) => {
+      if (!document.getElementById(`o-${i}`)) return;
+      document.getElementById(`o-${i}`).style.background = pr.dono !== null ? gs.ps.find(x => x.id === pr.dono).color : 'transparent';
+      document.getElementById(`s-${i}`).innerHTML = '★'.repeat(pr.lvl);
+    });
+
+    gs.ps.forEach(p => {
+      let t = document.getElementById(`t-${p.id}`);
+      if (!t) {
+        t = document.createElement('div');
+        t.className = 'token';
+        t.id = `t-${p.id}`;
+        t.style.borderColor = p.color;
+        board.appendChild(t);
+      }
+      t.innerText = p.av;
+      t.style.display = p.faliu ? 'none' : 'flex';
+
+      const c = document.getElementById(`c-${p.pos}`);
+      if (c) {
+        const r = c.getBoundingClientRect();
+        const br = board.getBoundingClientRect();
+        // A matemática usa metades relativas da própria célula: ela não quebra com aspecto retangular!
+        t.style.top = `${r.top - br.top + r.height / 2 - (window.innerWidth < 1024 ? 10 : 13)}px`;
+        t.style.left = `${r.left - br.left + r.width / 2 - (window.innerWidth < 1024 ? 10 : 13)}px`;
+      }
+    });
+
+    const l = document.getElementById('p-list');
+    l.innerHTML = '';
+    gs.ps.forEach((p, i) => {
+      if (p.faliu) return;
+      let invHtml = '<div class="p-inventory">';
+      gs.props.forEach((pr, idx) => {
+        if (pr.dono === p.id) {
+          const cData = conf[idx];
+          invHtml += `<span class="inv-badge" style="background:${cData.c || '#555'}">${cData.n} ${'★'.repeat(pr.lvl)}</span>`;
+        }
+      });
+      invHtml += '</div>';
+      
+      const isTurn = i === gs.turn;
+      const turnIndicator = isTurn ? `<span style="font-size: 10px; color: var(--gold-main); font-weight: 900; margin-left: auto;">SUA VEZ</span>` : '';
+
+      l.innerHTML += `<div class="p-card ${isTurn ? 'act' : ''}"><div class="p-card-top"><div class="p-av" style="border-color:${p.color}">${p.av}</div><div class="p-info"><h3>${p.name}${p.inJail ? ' <span style="color:#f00">(Preso)</span>' : ''}</h3><div class="p-money">$${p.money}</div></div>${turnIndicator}</div>${invHtml}</div>`;
+    });
+
+    document.getElementById('d1').innerText = gs.d1;
+    document.getElementById('d2').innerText = gs.d2;
+    if (gs.st === 'ROLLING') {
+      document.getElementById('d1').classList.add('rolling');
+      document.getElementById('d2').classList.add('rolling');
+    } else {
+      document.getElementById('d1').classList.remove('rolling');
+      document.getElementById('d2').classList.remove('rolling');
+    }
+
+    const isMyTurn = (gs.ps[gs.turn].id === myId);
+    
+    document.getElementById('b-roll').disabled = !(isMyTurn && gs.st === 'IDLE');
+    if(isMyTurn && gs.st === 'IDLE') {
+        document.getElementById('b-roll').innerText = "Rolar Dados";
+    } else if (!isMyTurn) {
+        document.getElementById('b-roll').innerText = "Aguarde...";
+    } else {
+        document.getElementById('b-roll').innerText = "Rolando...";
+    }
+
+    if (gs.modal) {
+      document.getElementById('m-title').innerText = gs.modal.t;
+      document.getElementById('m-desc').innerHTML = gs.modal.d;
+      const b = document.getElementById('m-btns');
+      b.innerHTML = '';
+      gs.modal.b.forEach((txt, i) => {
+        const bt = document.createElement('button');
+        bt.innerText = txt;
+        bt.className = i === 1 ? 'btn btn-sec' : 'btn';
+        bt.disabled = !isMyTurn;
+        bt.onclick = () => sendAction({ type: 'MODAL_ACT', idx: i });
+        b.appendChild(bt);
+      });
+      document.getElementById('sc-modal').classList.add('active');
+    } else {
+      document.getElementById('sc-modal').classList.remove('active');
+    }
+  }
+  /* ==========================================
+     MODO DE TESTE VISUAL (APAGUE QUANDO TERMINAR)
+     ========================================== */
+  window.onload = () => {
+    // Esconde os menus
+    document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
+    document.getElementById('game-ui').style.display = 'flex';
+    
+    // Cria jogadores falsos
+    myId = 'teste';
+    gs.ps = [
+      { id: 'teste', name: 'Magnata Teste', av: '👨‍🍳', color: 'var(--c-p1)', money: 2500, pos: 0, faliu: false, inJail: false },
+      { id: 'bot', name: 'Bot Investidor', av: '👩‍🍳', color: 'var(--c-p2)', money: 2500, pos: 0, faliu: false, inJail: false }
+    ];
+    
+    // Inicia o tabuleiro
+    gs.st = 'IDLE';
+    conf.forEach(c => gs.props.push({ dono: null, lvl: 0 }));
+    render();
+  };
+</script>
+</body>
+</html>
