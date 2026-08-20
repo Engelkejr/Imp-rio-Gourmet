@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="icon" type="image/png" href="logo.png">
-  
+
 </head>
 <body>
 
@@ -99,7 +99,7 @@
             </div>
         </div>
     </div>
-    
+
     <div id="sidebar">
         <div id="p-list"></div>
     </div>
@@ -235,7 +235,7 @@ const globalEvents = [
     d: "Clientes estão gastando menos. Todos perdem $250.",
     eff: (p) => { p.money -= 250; checkBankruptcy(p); }
   }
-  
+
 ];
 
 const individualEvents = [
@@ -714,12 +714,12 @@ const individualEvents = [
     gs.st = 'IDLE';
     broadcast();
 }
-  
+
   function showGlobalAlert(title, desc) {
       const alertBox = document.getElementById('global-event-alert');
       alertBox.innerHTML = `⚠️ ${title} ⚠️<br><span style="font-size: 12px; font-weight: normal;">${desc}</span>`;
       alertBox.style.display = 'block';
-      
+
       setTimeout(() => {
           alertBox.style.display = 'none';
       }, 6000);
@@ -807,7 +807,7 @@ const individualEvents = [
         }
       });
       invHtml += '</div>';
-      
+
       const isTurn = i === gs.turn;
       const turnIndicator = isTurn ? `<span style="font-size: 10px; color: var(--gold-main); font-weight: 900; margin-left: auto;">SUA VEZ</span>` : '';
 
@@ -825,7 +825,7 @@ const individualEvents = [
     }
 
     const isMyTurn = (gs.ps[gs.turn].id === myId);
-    
+
     document.getElementById('b-roll').disabled = !(isMyTurn && gs.st === 'IDLE');
     if(isMyTurn && gs.st === 'IDLE') {
         document.getElementById('b-roll').innerText = "Rolar Dados";
@@ -853,7 +853,7 @@ const individualEvents = [
       document.getElementById('sc-modal').classList.remove('active');
     }
   }
-  
+
 </script>
 </body>
 </html>

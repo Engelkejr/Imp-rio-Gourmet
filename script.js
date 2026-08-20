@@ -1,4 +1,4 @@
-
+﻿
   const conf = [
     { t: 'c', n: 'INÍCIO', g: '1/1' },
     { t: 'p', n: 'Pastel do Madruga', pr: 60, al: [2, 10, 30, 90], up: 50, c: 'var(--c-brown)', g: '1/2' },
@@ -120,7 +120,7 @@ const globalEvents = [
     d: "Clientes estão gastando menos. Todos perdem $250.",
     eff: (p) => { p.money -= 250; checkBankruptcy(p); }
   }
-  
+
 ];
 
 const individualEvents = [
@@ -599,12 +599,12 @@ const individualEvents = [
     gs.st = 'IDLE';
     broadcast();
 }
-  
+
   function showGlobalAlert(title, desc) {
       const alertBox = document.getElementById('global-event-alert');
       alertBox.innerHTML = `⚠️ ${title} ⚠️<br><span style="font-size: 12px; font-weight: normal;">${desc}</span>`;
       alertBox.style.display = 'block';
-      
+
       setTimeout(() => {
           alertBox.style.display = 'none';
       }, 6000);
@@ -685,7 +685,7 @@ const individualEvents = [
     gs.ps.forEach((p, i) => {
       if (p.faliu) return;
       let invHtml = '';
-      // Cada jogador vê APENAS as próprias propriedades (com aluguel) em formato de cartões em cascata
+
       if (p.id === myId) {
         let hasAny = false;
         invHtml = '<div class="my-props">';
@@ -708,7 +708,6 @@ const individualEvents = [
         invHtml += '</div>';
       }
 
-      
       const isTurn = i === gs.turn;
       const turnIndicator = isTurn ? `<span style="font-size: 10px; color: var(--gold-main); font-weight: 900; margin-left: auto;">SUA VEZ</span>` : '';
 
@@ -726,7 +725,7 @@ const individualEvents = [
     }
 
     const isMyTurn = (gs.ps[gs.turn].id === myId);
-    
+
     document.getElementById('b-roll').disabled = !(isMyTurn && gs.st === 'IDLE');
     if(isMyTurn && gs.st === 'IDLE') {
         document.getElementById('b-roll').innerText = "Rolar Dados";
@@ -750,7 +749,7 @@ const individualEvents = [
           b.appendChild(bt);
         });
       } else {
-        // Outros jogadores NÃO veem opções de compra/ação (só a informação)
+
         b.innerHTML = '<div class="modal-wait">Aguardando a ação do jogador da vez...</div>';
       }
       document.getElementById('sc-modal').classList.add('active');
