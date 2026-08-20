@@ -1,4 +1,4 @@
-﻿
+
   const conf = [
     { t: 'c', n: 'INÍCIO', g: '1/1' },
     { t: 'p', n: 'Pastel do Madruga', pr: 60, al: [2, 10, 30, 90], up: 50, c: 'var(--c-brown)', g: '1/2' },
